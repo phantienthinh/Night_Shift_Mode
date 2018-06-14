@@ -21,16 +21,15 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
 
             <LinearLayout
@@ -62,16 +61,17 @@
             </LinearLayout>
 
             <LinearLayout
-                android:weightSum="7"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="7">
+
                 <LinearLayout
-                    android:weightSum="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:weightSum="3">
 
                     <TextView
                         android:id="@+id/textView"
@@ -101,54 +101,53 @@
 
 
                 <LinearLayout
-                    android:layout_weight="4"
-                    android:weightSum="5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="4"
                     android:orientation="vertical"
-                    >
+                    android:weightSum="5">
 
                     <Button
-                        android:layout_weight="1"
                         android:id="@+id/btn_green"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_button"
                         android:text="Green" />
 
                     <Button
-                        android:layout_weight="1"
                         android:id="@+id/btn_yellow"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_button"
                         android:text="Yellow" />
 
                     <Button
-                        android:layout_weight="1"
                         android:id="@+id/btn_red"
-                        android:layout_marginBottom="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_button"
                         android:text="Red" />
 
                     <Button
-                        android:layout_weight="1"
                         android:id="@+id/btn_pink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_button"
                         android:text="pink" />
 
                     <Button
-                        android:layout_weight="1"
                         android:id="@+id/btn_blue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_button"
                         android:text="Blue" />
                 </LinearLayout>
@@ -158,19 +157,47 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/Imv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/Imv_time_2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignEnd="@+id/Imv_time"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:layout_gravity="right"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="154dp"
+            android:background="@drawable/custom_image_view"
+            android:elevation="5dp"
+            android:src="@drawable/halloween"
+            android:layout_alignRight="@+id/Imv_time" />
+
+        <ImageView
+            android:id="@+id/Imv_time_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignEnd="@+id/Imv_time"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="94dp"
             android:background="@drawable/custom_image_view"
             android:elevation="4dp"
             android:src="@drawable/clock"
+            android:layout_alignRight="@+id/Imv_time" />
+
+        <ImageView
+            android:id="@+id/Imv_time"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp" />
+            android:layout_gravity="right"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/custom_image_view"
+            android:elevation="4dp"
+            android:src="@android:drawable/ic_menu_add" />
     </RelativeLayout>
 
 
