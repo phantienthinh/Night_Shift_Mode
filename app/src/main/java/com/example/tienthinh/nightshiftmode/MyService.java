@@ -11,16 +11,25 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import java.util.Calendar;
+
+import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
+import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE;
+import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
 
 public class MyService extends Service {
     //   private WindowManager.LayoutParams layoutParams;
     int realWidth;
     int realHeight;
+    int hour, minute;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editorSv;
     private String SHARED_PREFERENCES_NAME_SerVice;
@@ -40,7 +49,6 @@ public class MyService extends Service {
     private boolean aBoolean_green = false;
     private boolean aBoolean_yellow = false;
     private boolean aBoolean_pink = false;
-    int hour,minute;
 
 
     public MyService() {
@@ -169,7 +177,7 @@ public class MyService extends Service {
     public void onDestroy() {
         try {
             wm.removeView(relativeLayout);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -180,9 +188,9 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (MainActivity.hour==0){
+        if (MainActivity.hour == 0) {
 
-        }else {
+        } else {
             editorSv.putInt("hour", MainActivity.hour);
             editorSv.putInt("minute", MainActivity.minute);
             editorSv.commit();
@@ -203,6 +211,15 @@ public class MyService extends Service {
         color = Color.argb(alpha, red, green, blue);
 
 
+//        int flags1 = View.SYSTEM_UI_FLAG_IMMERSIVE
+//                // Set the content to appear under the system bars so that the
+//                // content doesn't resize when the system bars hide and show.
+//                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                // Hide the nav bar and status bar
+//                //| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
         //Intent  intent = new Intent(this,MyService.class);
 //        Integer so = intent.getIntExtra("key_alpha",se\);
@@ -214,15 +231,19 @@ public class MyService extends Service {
 
         //   SharedPreferencesManager.getFavor(getBaseContext());
 
+
         params = new WindowManager.LayoutParams();
         params.width = sharedPreferences.getInt("width", WindowManager.LayoutParams.MATCH_PARENT);
-        params.height = sharedPreferences.getInt("height", WindowManager.LayoutParams.MATCH_PARENT);
+        params.height = sharedPreferences.getInt("height", WindowManager.LayoutParams.MATCH_PARENT)+200;
         Log.d("width,height", params.width + "height" + params.height + "");
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-        params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+//        params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+//        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+//        params.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+//        params.flags = SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | SYSTEM_UI_FLAG_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE
+//                | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        params.flags =getSystemUiVisibility();
         params.format = PixelFormat.TRANSLUCENT;
-
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -448,27 +469,27 @@ public class MyService extends Service {
                             Calendar calendar = Calendar.getInstance();
                             int h = calendar.get(Calendar.HOUR);
                             int p = calendar.get(Calendar.MINUTE);
-                            Log.e("hour","h"+h+"p"+p+"hour"+hour+"minute"+minute );
+                            Log.e("hour", "h" + h + "p" + p + "hour" + hour + "minute" + minute);
 
-                            if (h==MainActivity.hour && p == MainActivity.minute){
+                            if (h == MainActivity.hour && p == MainActivity.minute) {
                                 try {
-                                    Log.e("qq","vao roi");
-                                    wm.addView(relativeLayout,params);
-                                }catch (Exception e){
+                                    Log.e("qq", "vao roi");
+                                    wm.addView(relativeLayout, params);
+                                } catch (Exception e) {
 
                                 }
 
-                            }else {
+                            } else {
 
                             }
-                            if (h==MainActivity.hour1&&p==MainActivity.phut1){
+                            if (h == MainActivity.hour1 && p == MainActivity.phut1) {
                                 try {
                                     wm.removeView(relativeLayout);
-                                }catch (Exception e){
+                                } catch (Exception e) {
 
                                 }
 
-                            }else {
+                            } else {
 
                             }
 
@@ -690,5 +711,12 @@ public class MyService extends Service {
         } else {
 
         }
+    }
+
+    public int getSystemUiVisibility() {
+        return View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
     }
 }

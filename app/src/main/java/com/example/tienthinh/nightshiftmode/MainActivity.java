@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,8 +16,8 @@ import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -78,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmManager1;
     private PendingIntent pendingIntent;
     private Calendar calendar;
-    private boolean isaBooleanBackgroundRed=false;
-    private boolean isaBooleanBackgroundGreen=false;
-    private boolean isaBooleanBackgroundBlue=false;
-    private boolean isaBooleanBackgroundYellow=false;
-    private boolean isaBooleanBackgroundPink=false;
+    private boolean isaBooleanBackgroundRed = false;
+    private boolean isaBooleanBackgroundGreen = false;
+    private boolean isaBooleanBackgroundBlue = false;
+    private boolean isaBooleanBackgroundYellow = false;
+    private boolean isaBooleanBackgroundPink = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
                                     intentProgress.putExtra("key_color_green", green);
                                     intentProgress.putExtra("key_color_blue", blue);
                                     sendBroadcast(intentProgress);
-                                }else {
-                                    if (sharedPreferences.getBoolean("aBooleanBlue", false) == true){
+                                } else {
+                                    if (sharedPreferences.getBoolean("aBooleanBlue", false) == true) {
                                         blue = 255;
                                         red = 0;
                                         green = 0;
@@ -174,9 +175,8 @@ public class MainActivity extends AppCompatActivity {
                                         intentProgress.putExtra("key_color_green", green);
                                         intentProgress.putExtra("key_color_blue", blue);
                                         sendBroadcast(intentProgress);
-                                        Log.e("red1","alpha"+alpha+"red"+green+"blue"+blue);
-                                    }
-                                    else {
+                                        Log.e("red1", "alpha" + alpha + "red" + green + "blue" + blue);
+                                    } else {
 
                                     }
                                 }
@@ -205,20 +205,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findRealSize(Activity activity) {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//
+//        if (Build.VERSION.SDK_INT >= 17) {
+//            activity.getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+//        } else {
+//            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        }
+//
+//        int realWidth = displayMetrics.widthPixels;
+//        int realHeight = displayMetrics.heightPixels;
+//        width = realWidth;
+////        height = realHeight;
 
-        if (Build.VERSION.SDK_INT >= 17) {
-            activity.getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-        } else {
-            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point point = new Point();
+            display.getRealSize(point);
+            int realWidth = point.x;
+            int realHeight = point.y;
+            width = realWidth;
+            height = realHeight;
+            Log.i("LOG_TAG", "realWidth: " + realWidth + " realHeight: " + realHeight);
         }
 
-        int realWidth = displayMetrics.widthPixels;
-        int realHeight = displayMetrics.heightPixels;
-        width = realWidth;
-        height = realHeight;
 
-        Log.i("LOG_TAG", "realWidth: " + realWidth + " realHeight: " + realHeight);
     }
 
     private void initView() {
@@ -253,12 +264,12 @@ public class MainActivity extends AppCompatActivity {
         Imv_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (aBooleanBackground==false){
-                    aBooleanBackground=true;
+                if (aBooleanBackground == false) {
+                    aBooleanBackground = true;
                     imageView_btn_1.setVisibility(View.VISIBLE);
                     imageView_btn_2.setVisibility(View.VISIBLE);
-                }else {
-                    aBooleanBackground=false;
+                } else {
+                    aBooleanBackground = false;
                     imageView_btn_1.setVisibility(View.GONE);
                     imageView_btn_2.setVisibility(View.GONE);
                 }
