@@ -63,12 +63,12 @@ public class MyService extends Service {
     private IntentFilter filter;
     // private Context context;
     private WindowManager.LayoutParams params;
-    private boolean aBoolean_progress = false;
-    private boolean aBoolean_red = false;
-    private boolean aBoolean_blue = false;
-    private boolean aBoolean_green = false;
-    private boolean aBoolean_yellow = false;
-    private boolean aBoolean_pink = false;
+    public static boolean aBoolean_progress = false;
+    public static boolean aBoolean_red = false;
+    public static boolean aBoolean_blue = false;
+    public static boolean aBoolean_green = false;
+    public static boolean aBoolean_yellow = false;
+    public static boolean aBoolean_pink = false;
     private Sensor sensor;
     private SensorManager sensorManager;
     private SensorEventListener sensorEventListener;

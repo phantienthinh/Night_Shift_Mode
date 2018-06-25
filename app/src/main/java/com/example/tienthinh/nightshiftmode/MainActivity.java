@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 //        if (red == 0) {
 //            if (green == 0) {
 //                if (blue == 0) {
-        if (sharedPreferences.getBoolean("aBooleanRed", false) == true) {
+        if (MyService.aBoolean_Img_red == true) {
             red = 255;
             green = 0;
             blue = 0;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             intentProgress.putExtra("key_color_blue", blue);
             sendBroadcast(intentProgress);
         } else {
-            if (sharedPreferences.getBoolean("aBooleanGreen", false) == true) {
+            if (MyService.aBoolean_Img_green == true) {
                 red = 0;
                 green = 255;
                 blue = 0;
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 intentProgress.putExtra("key_color_blue", blue);
                 sendBroadcast(intentProgress);
             } else {
-                if (sharedPreferences.getBoolean("aBooleanPink", false) == true) {
+                if (MyService.aBoolean_Img_pink==true) {
                     red = 255;
                     green = 192;
                     blue = 203;
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     intentProgress.putExtra("key_color_blue", blue);
                     sendBroadcast(intentProgress);
                 } else {
-                    if (sharedPreferences.getBoolean("aBooleanYellow", false) == true) {
+                    if (MyService.aBoolean_Img_yellow==true) {
                         blue = 0;
                         red = 255;
                         green = 255;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                         intentProgress.putExtra("key_color_blue", blue);
                         sendBroadcast(intentProgress);
                     } else {
-                        if (sharedPreferences.getBoolean("aBooleanBlue", false) == true) {
+                        if (MyService.aBoolean_Img_blue==true) {
                             blue = 255;
                             red = 0;
                             green = 0;
@@ -911,6 +911,8 @@ public class MainActivity extends AppCompatActivity {
                 intentPink.putExtra("key_color_pink_green", green);
                 intentPink.putExtra("key_color_pink_red", red);
                 sendBroadcast(intentPink);
+                Intent intent = new Intent("img_pink");
+                sendBroadcast(intent);
             }
         });
     }
@@ -946,6 +948,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("aBooleanPink", aBooleanPink);
                 editor.putBoolean("aBooleanYellow", aBooleanYellow);
                 editor.commit();
+                Intent intent = new Intent("img_blue");
+                sendBroadcast(intent);
             }
         });
 
@@ -982,6 +986,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("aBooleanPink", aBooleanPink);
                 editor.putBoolean("aBooleanYellow", aBooleanYellow);
                 editor.commit();
+                Intent intent = new Intent("img_yellow");
+                sendBroadcast(intent);
 
             }
         });
@@ -1015,6 +1021,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("aBooleanPink", aBooleanPink);
                 editor.putBoolean("aBooleanYellow", aBooleanYellow);
                 editor.commit();
+                Intent intent = new Intent("img_red");
+                sendBroadcast(intent);
             }
         });
     }
@@ -1054,6 +1062,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("aBooleanPink", aBooleanPink);
                 editor.putBoolean("aBooleanYellow", aBooleanYellow);
                 editor.commit();
+                Intent intent = new Intent("img_green");
+                sendBroadcast(intent);
             }
         });
     }
