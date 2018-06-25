@@ -3,28 +3,42 @@ package com.example.tienthinh.nightshiftmode;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -33,6 +47,8 @@ import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
+
 public class MainActivity extends AppCompatActivity {
     public static int alpha;
     public static int width;
@@ -40,8 +56,17 @@ public class MainActivity extends AppCompatActivity {
     public static int hour1;
     public static int phut1;
     public static int hour, minute;
+    public static int red;
+    public static int green;
+    public static int blue;
+    //private NotificationCompat.Builder builder;
+    public NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
     int r;
     int position;
+    private BroadcastReceiver receiver;
+    private IntentFilter filter;
+    private float sensorLight;
     private Calendar calendar1;
     private Context context;
     private ImageView imageView_btn_1;
@@ -52,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private String SHARED_PREFERENCES_NAME;
     private ToggleButton toggleButton_Services;
     private ToggleButton toggleButton_CountDown;
+    private ToggleButton toggleButton_auto_night;
     private Toolbar toolbar;
     private SeekBar btn_seekBar;
     private boolean aBoolean;
@@ -62,10 +88,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean aBooleanYellow = false;
     private boolean aBooleanToggle = false;
     private boolean aBooleanBackground;
+    private boolean aBooleanDieuKien = false;
     private MyService myService;
-    private int red;
-    private int green;
-    private int blue;
     private RadioGroup radioGroup;
     private RadioButton rd_30, rd_60, rd_90, rd_120;
     private Button btn_green, btn_red, btn_yellow, btn_pink, btn_blue, btn_save_time, btn_set_time;
@@ -84,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean isaBooleanBackgroundBlue = false;
     private boolean isaBooleanBackgroundYellow = false;
     private boolean isaBooleanBackgroundPink = false;
+    private boolean aBooleanEyes = false;
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private SensorEventListener sensorEventListener;
+    private int notificationId;
+    private RemoteViews remoteViews;
+    private ImageButton img_red;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +124,12 @@ public class MainActivity extends AppCompatActivity {
         initView();
         setSupportActionBar(toolbar);
         permisonAndroid();
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        KhoiTaoSensor();
+//        float k = sensor.getMaximumRange();
+        //      Log.e("k", k + "");
 
         Log.e("r,g,b", "red" + red + "green" + green + "blue" + blue);
 
@@ -107,16 +144,56 @@ public class MainActivity extends AppCompatActivity {
             Log.d("position1", position + "");
         }
         toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
-
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    if (sharedPreferences.getBoolean("aBooleanRed", false) == true) {
-                        red = 255;
-                        green = 0;
+        toggleButton_auto_night.setChecked(sharedPreferences.getBoolean("Toggle_check_auto_night", false));
+        Log.e("cl", red + ":" + green + ":" + blue + "");
+//        if (red == 0) {
+//            if (green == 0) {
+//                if (blue == 0) {
+        if (sharedPreferences.getBoolean("aBooleanRed", false) == true) {
+            red = 255;
+            green = 0;
+            blue = 0;
+            alpha = btn_seekBar.getProgress();
+            btn_red.setBackgroundResource(R.drawable.custom_button_1);
+            Intent intentProgress = new Intent("color_progress");
+            intentProgress.putExtra("key_color", alpha);
+            intentProgress.putExtra("key_color_red", red);
+            intentProgress.putExtra("key_color_green", green);
+            intentProgress.putExtra("key_color_blue", blue);
+            sendBroadcast(intentProgress);
+        } else {
+            if (sharedPreferences.getBoolean("aBooleanGreen", false) == true) {
+                red = 0;
+                green = 255;
+                blue = 0;
+                alpha = btn_seekBar.getProgress();
+                btn_green.setBackgroundResource(R.drawable.custom_button_1);
+                Intent intentProgress = new Intent("color_progress");
+                intentProgress.putExtra("key_color", alpha);
+                intentProgress.putExtra("key_color_red", red);
+                intentProgress.putExtra("key_color_green", green);
+                intentProgress.putExtra("key_color_blue", blue);
+                sendBroadcast(intentProgress);
+            } else {
+                if (sharedPreferences.getBoolean("aBooleanPink", false) == true) {
+                    red = 255;
+                    green = 192;
+                    blue = 203;
+                    alpha = btn_seekBar.getProgress();
+                    btn_pink.setBackgroundResource(R.drawable.custom_button_1);
+                    Intent intentProgress = new Intent("color_progress");
+                    intentProgress.putExtra("key_color", alpha);
+                    intentProgress.putExtra("key_color_red", red);
+                    intentProgress.putExtra("key_color_green", green);
+                    intentProgress.putExtra("key_color_blue", blue);
+                    sendBroadcast(intentProgress);
+                } else {
+                    if (sharedPreferences.getBoolean("aBooleanYellow", false) == true) {
                         blue = 0;
+                        red = 255;
+                        green = 255;
                         alpha = btn_seekBar.getProgress();
-                        btn_red.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
                         Intent intentProgress = new Intent("color_progress");
                         intentProgress.putExtra("key_color", alpha);
                         intentProgress.putExtra("key_color_red", red);
@@ -124,75 +201,175 @@ public class MainActivity extends AppCompatActivity {
                         intentProgress.putExtra("key_color_blue", blue);
                         sendBroadcast(intentProgress);
                     } else {
-                        if (sharedPreferences.getBoolean("aBooleanGreen", false) == true) {
+                        if (sharedPreferences.getBoolean("aBooleanBlue", false) == true) {
+                            blue = 255;
                             red = 0;
-                            green = 255;
-                            blue = 0;
+                            green = 0;
                             alpha = btn_seekBar.getProgress();
-                            btn_green.setBackgroundResource(R.drawable.custom_button_1);
+                            btn_blue.setBackgroundResource(R.drawable.custom_button_1);
                             Intent intentProgress = new Intent("color_progress");
                             intentProgress.putExtra("key_color", alpha);
                             intentProgress.putExtra("key_color_red", red);
                             intentProgress.putExtra("key_color_green", green);
                             intentProgress.putExtra("key_color_blue", blue);
                             sendBroadcast(intentProgress);
+                            Log.e("red1", "alpha" + alpha + "red" + green + "blue" + blue);
                         } else {
-                            if (sharedPreferences.getBoolean("aBooleanPink", false) == true) {
-                                red = 255;
-                                green = 192;
-                                blue = 203;
-                                alpha = btn_seekBar.getProgress();
-                                btn_pink.setBackgroundResource(R.drawable.custom_button_1);
-                                Intent intentProgress = new Intent("color_progress");
-                                intentProgress.putExtra("key_color", alpha);
-                                intentProgress.putExtra("key_color_red", red);
-                                intentProgress.putExtra("key_color_green", green);
-                                intentProgress.putExtra("key_color_blue", blue);
-                                sendBroadcast(intentProgress);
-                            } else {
-                                if (sharedPreferences.getBoolean("aBooleanYellow", false) == true) {
-                                    blue = 0;
-                                    red = 255;
-                                    green = 255;
-                                    alpha = btn_seekBar.getProgress();
-                                    btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
-                                    Intent intentProgress = new Intent("color_progress");
-                                    intentProgress.putExtra("key_color", alpha);
-                                    intentProgress.putExtra("key_color_red", red);
-                                    intentProgress.putExtra("key_color_green", green);
-                                    intentProgress.putExtra("key_color_blue", blue);
-                                    sendBroadcast(intentProgress);
-                                } else {
-                                    if (sharedPreferences.getBoolean("aBooleanBlue", false) == true) {
-                                        blue = 255;
-                                        red = 0;
-                                        green = 0;
-                                        alpha = btn_seekBar.getProgress();
-                                        btn_blue.setBackgroundResource(R.drawable.custom_button_1);
-                                        Intent intentProgress = new Intent("color_progress");
-                                        intentProgress.putExtra("key_color", alpha);
-                                        intentProgress.putExtra("key_color_red", red);
-                                        intentProgress.putExtra("key_color_green", green);
-                                        intentProgress.putExtra("key_color_blue", blue);
-                                        sendBroadcast(intentProgress);
-                                        Log.e("red1", "alpha" + alpha + "red" + green + "blue" + blue);
-                                    } else {
 
-                                    }
-                                }
-                            }
                         }
                     }
-
-                } else {
-
                 }
-            } else {
-
             }
-        } else {
-
         }
+
+//                } else {
+//
+//                }
+//            } else {
+//
+//            }
+//        } else {
+//
+//        }
+        KhoiTaoReceive();
+    }
+
+    private void KhoiTaoReceive() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (intent.getAction()) {
+                    case "img_pink":
+                        btn_green.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button);
+                        btn_pink.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_red.setBackgroundResource(R.drawable.custom_button);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        Log.e("img_pink", "da vao toi day");
+                        aBooleanRed = false;
+                        aBooleanGreen = false;
+                        aBooleanBlue = false;
+                        aBooleanYellow = false;
+                        aBooleanPink = true;
+                        red = 255;
+                        green = 192;
+                        blue = 203;
+                        editor.putInt("pink_red", 255);
+                        editor.putInt("pink_green", 192);
+                        editor.putInt("pink_blue", 203);
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                        break;
+                    case "img_green":
+                        btn_pink.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_red.setBackgroundResource(R.drawable.custom_button);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        aBooleanRed = false;
+                        aBooleanGreen = true;
+                        aBooleanBlue = false;
+                        aBooleanYellow = false;
+                        aBooleanPink = false;
+                        red = 0;
+                        green = 255;
+                        blue = 0;
+                        editor.putInt("pink_red", 0);
+                        editor.putInt("pink_green", 255);
+                        editor.putInt("pink_blue", 0);
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                        break;
+                    case "img_blue":
+                        btn_pink.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_red.setBackgroundResource(R.drawable.custom_button);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        aBooleanRed = false;
+                        aBooleanGreen = false;
+                        aBooleanBlue = true;
+                        aBooleanYellow = false;
+                        aBooleanPink = false;
+                        red = 0;
+                        green = 0;
+                        blue = 255;
+                        editor.putInt("pink_red", 0);
+                        editor.putInt("pink_green", 0);
+                        editor.putInt("pink_blue", 255);
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                        break;
+                    case "img_red":
+                        btn_pink.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button);
+                        btn_red.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        aBooleanRed = true;
+                        aBooleanGreen = false;
+                        aBooleanBlue = false;
+                        aBooleanYellow = false;
+                        aBooleanPink = false;
+                        red = 255;
+                        green = 0;
+                        blue = 0;
+                        editor.putInt("pink_red", 255);
+                        editor.putInt("pink_green", 0);
+                        editor.putInt("pink_blue", 0);
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                        break;
+                    case "img_yellow":
+                        btn_pink.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button);
+                        btn_red.setBackgroundResource(R.drawable.custom_button);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                        aBooleanRed = false;
+                        aBooleanGreen = false;
+                        aBooleanBlue = false;
+                        aBooleanYellow = true;
+                        aBooleanPink = false;
+                        red = 255;
+                        green = 255;
+                        blue = 0;
+                        editor.putInt("pink_red", 255);
+                        editor.putInt("pink_green", 255);
+                        editor.putInt("pink_blue", 0);
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                        break;
+                }
+            }
+        };
+        filter = new IntentFilter();
+        filter.addAction("img_pink");
+        filter.addAction("img_green");
+        filter.addAction("img_red");
+        filter.addAction("img_blue");
+        filter.addAction("img_yellow");
+        getBaseContext().registerReceiver(receiver, filter);
     }
 
 
@@ -246,10 +423,11 @@ public class MainActivity extends AppCompatActivity {
         imageView_btn_2 = (ImageView) findViewById(R.id.Imv_time_2);
         imageView_btn_1.setVisibility(View.GONE);
         imageView_btn_2.setVisibility(View.GONE);
-        onClickToggleButton();
+        toggleButton_auto_night = (ToggleButton) findViewById(R.id.toggleButton_auto_night);
+        onClickToggleButtonStart();
         //btn_seekBar.setVisibility(View.GONE);
         onclickSeekBar();
-
+        onClickToggleButtonAutoStart();
         onclickButtonGreen();
         onclickButtonRed();
         onclickButtonYellow();
@@ -258,6 +436,178 @@ public class MainActivity extends AppCompatActivity {
         onClickImvTime();
 
 
+    }
+
+    private void onClickToggleButtonAutoStart() {
+        toggleButton_auto_night.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean boleanAutoStart = toggleButton_auto_night.isChecked();
+                Log.e("boleanAutoStart", String.valueOf(boleanAutoStart));
+                if (boleanAutoStart == true) {
+
+
+                    if (toggleButton_Services.isChecked() == true) {
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "Vui lòng bật ứng dụng", Toast.LENGTH_SHORT).show();
+                        toggleButton_auto_night.setChecked(false);
+                        aBooleanDieuKien = false;
+                    }
+                    if (toggleButton_auto_night.isChecked() == false) {
+
+                    } else {
+                        if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
+                            sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
+
+
+                            Toast.makeText(MainActivity.this, "Chức năng đã được bật", Toast.LENGTH_SHORT).show();
+                            aBooleanDieuKien = true;
+                            //KhoiTaoSensor();
+                        } else {
+                            toggleButton_auto_night.setChecked(false);
+                            Toast.makeText(MainActivity.this, "Xin lỗi!!! điện thoại của bạn không thể sử dụng được chức năng này ",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                } else {
+                    aBooleanDieuKien = false;
+                    sensorManager.unregisterListener(sensorEventListener);
+                    sensorLight = 0;
+
+                    //c  sensorManager.unregisterListener((SensorEventListener) MainActivity.this,sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY));
+                    Toast.makeText(MainActivity.this, "Bạn đã tắt chức năng", Toast.LENGTH_SHORT).show();
+                }
+                editor.putBoolean("Toggle_check_auto_night", toggleButton_auto_night.isChecked());
+                editor.commit();
+            }
+
+        });
+
+    }
+
+    private void KhoiTaoSensor() {
+        Log.e("ok", "KhoiTaoSensor: ");
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                Log.e("sensorLight", sensorLight + "");
+                float[] value = event.values;
+                sensorLight = value[0];
+                UpdateUI();
+
+
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+    }
+
+    private void UpdateUI() {
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    handler.post(new Runnable() {
+                        public void run() {
+                            setBright();
+
+                        }
+                    });
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+    private void setBright() {
+        if (sensorLight > 0 && sensorLight <= 150) {
+            Intent intent = new Intent("sendAction1");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 150 && sensorLight <= 600) {
+            Intent intent = new Intent("sendAction2");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 600 && sensorLight <= 1000) {
+            Intent intent = new Intent("sendAction3");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 1000 && sensorLight <= 1500) {
+            Intent intent = new Intent("sendAction4");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 1500 && sensorLight <= 3000) {
+            Intent intent = new Intent("sendAction5");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 3000 && sensorLight < 5000) {
+            Intent intent = new Intent("sendAction6");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 5000 && sensorLight <= 8000) {
+            Intent intent = new Intent("sendAction7");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 8000 && sensorLight <= 13000) {
+            Intent intent = new Intent("sendAction8");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 13000 && sensorLight <= 18000) {
+            Intent intent = new Intent("sendAction8");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 18000 && sensorLight <= 23000) {
+            Intent intent = new Intent("sendAction9");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 23000 && sensorLight < 26000) {
+            Intent intent = new Intent("sendAction10");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 26000 && sensorLight < 30000) {
+            Intent intent = new Intent("sendAction11");
+            sendBroadcast(intent);
+        } else {
+
+        }
+        if (sensorLight > 30000) {
+            Intent intent = new Intent("sendAction12");
+            sendBroadcast(intent);
+        } else {
+
+        }
     }
 
     private void onClickImvTime() {
@@ -284,6 +634,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         onClickImv_btn_2();
+                        if (sharedPreferences.getInt("hour", 0) == 0 && sharedPreferences.getInt("minute", 0) == 0) {
+
+                        } else {
+                            tv_time_start.setText(sharedPreferences.getInt("hour", 0) + ":"
+                                    + sharedPreferences.getInt("minute", 0));
+                        }
+
+                        if (sharedPreferences.getInt("hour1", 0) == 0 && sharedPreferences.getInt("phut1", 0) == 0) {
+
+                        } else {
+                            tv_time_stop.setText(sharedPreferences.getInt("hour1", 0) + ":" + sharedPreferences.getInt("phut1", 0));
+                        }
+
                     }
                 });
 
@@ -302,6 +665,7 @@ public class MainActivity extends AppCompatActivity {
         tv_time_start = (TextView) dialog1.findViewById(R.id.tv_time_start);
         tv_time_stop = (TextView) dialog1.findViewById(R.id.tv_time_stop);
         btn_set_time = (Button) dialog1.findViewById(R.id.btn_set_time);
+//        if ()
 
 
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -379,6 +743,12 @@ public class MainActivity extends AppCompatActivity {
                     imageView_btn_1.setVisibility(View.GONE);
                     imageView_btn_2.setVisibility(View.GONE);
                     dialog1.cancel();
+                    editor.putInt("hour", hour);
+                    editor.putInt("minute", minute);
+                    editor.putInt("hour1", hour1);
+                    editor.putInt("hour1", phut1);
+                    editor.commit();
+                    Log.e("xl", "hour: " + hour + "minute: " + minute + "hour1: " + hour1 + "minute1: " + phut1);
                 }
 
             }
@@ -459,7 +829,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     // Toast.makeText(MainActivity.this,"end",Toast.LENGTH_SHORT).show();
                     Log.d("sumTime1", "onFinish: ");
-                    toggleButton_Services.setChecked(false);
+                    // toggleButton_Services.setChecked(false);
                     stopService(new Intent(MainActivity.this, MyService.class));
                     toggleButton_Services.setChecked(false);
                 }
@@ -667,7 +1037,9 @@ public class MainActivity extends AppCompatActivity {
                 green = 255;
                 blue = 0;
                 Intent intentGreen = new Intent("color_green");
+                intentGreen.putExtra("key_color_red", red);
                 intentGreen.putExtra("key_color_green", green);
+                intentGreen.putExtra("key_color_blue", blue);
                 sendBroadcast(intentGreen);
 //                int green =255;
 //                Intent intentGreen = new Intent(MainActivity.this,MyService.class);
@@ -734,7 +1106,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void onClickToggleButton() {
+    private void onClickToggleButtonStart() {
         toggleButton_Services.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -746,6 +1118,14 @@ public class MainActivity extends AppCompatActivity {
                     Intent intentToggle_off = new Intent("toggleButton_off");
                     sendBroadcast(intentToggle_off);
                     stopService(new Intent(MainActivity.this, MyService.class));
+
+//                    try {
+//                        notificationManager.cancel(1998);
+//                    } catch (Exception e) {
+//
+//                    }
+
+
                 } else {
                     aBoolean = true;
                     aBooleanRed = false;
@@ -760,6 +1140,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("key_color_green", green);
                     startService(intent);
                     Toast.makeText(MainActivity.this, "on", Toast.LENGTH_SHORT).show();
+
+                   // KhoiTaoNoification();
                 }
                 editor.putBoolean("Toggle_check", toggleButton_Services.isChecked());
                 editor.commit();
@@ -769,10 +1151,206 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+    private void onclickImgGoApp() {
+//        Intent resultIntent = new Intent(this,MainActivity.class);
+//        PendingIntent resultPendingIntent =PendingIntent.getActivity(this
+//                ,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+//        builder.setContentIntent(resultPendingIntent);
+//        notificationManager.notify(notificationId,builder.build());
+
+
+    }
+
+
     @Override
     protected void onResume() {
+        Log.e("bo", MyService.aBoolean_Img_pink + "");
+
+        if (MyService.aBoolean_Img_pink == true) {
+            red = 255;
+            green = 192;
+            blue = 203;
+            alpha = btn_seekBar.getProgress();
+            //btn_pink.setBackgroundResource(R.drawable.custom_button_1);
+            Intent intentProgress = new Intent("color_progress");
+            intentProgress.putExtra("key_color", alpha);
+            intentProgress.putExtra("key_color_red", red);
+            intentProgress.putExtra("key_color_green", green);
+            intentProgress.putExtra("key_color_blue", blue);
+            sendBroadcast(intentProgress);
+            btn_green.setBackgroundResource(R.drawable.custom_button);
+            btn_blue.setBackgroundResource(R.drawable.custom_button);
+            btn_pink.setBackgroundResource(R.drawable.custom_button_1);
+            btn_red.setBackgroundResource(R.drawable.custom_button);
+            btn_yellow.setBackgroundResource(R.drawable.custom_button);
+            aBooleanRed = false;
+            aBooleanGreen = false;
+            aBooleanBlue = false;
+            aBooleanYellow = false;
+            aBooleanPink = true;
+            red = 255;
+            green = 192;
+            blue = 203;
+            editor.putInt("pink_red", 255);
+            editor.putInt("pink_green", 192);
+            editor.putInt("pink_blue", 203);
+            editor.putBoolean("aBooleanRed", aBooleanRed);
+            editor.putBoolean("aBooleanBlue", aBooleanBlue);
+            editor.putBoolean("aBooleanGreen", aBooleanGreen);
+            editor.putBoolean("aBooleanPink", aBooleanPink);
+            editor.putBoolean("aBooleanYellow", aBooleanYellow);
+            editor.commit();
+        } else {
+            if (MyService.aBoolean_Img_blue == true) {
+                red = 0;
+                green = 0;
+                blue = 255;
+                alpha = btn_seekBar.getProgress();
+                btn_blue.setBackgroundResource(R.drawable.custom_button_1);
+                Intent intentProgress = new Intent("color_progress");
+                intentProgress.putExtra("key_color", alpha);
+                intentProgress.putExtra("key_color_red", red);
+                intentProgress.putExtra("key_color_green", green);
+                intentProgress.putExtra("key_color_blue", blue);
+                sendBroadcast(intentProgress);
+                btn_green.setBackgroundResource(R.drawable.custom_button);
+                // btn_blue.setBackgroundResource(R.drawable.custom_button);
+                btn_pink.setBackgroundResource(R.drawable.custom_button);
+                btn_red.setBackgroundResource(R.drawable.custom_button);
+                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                aBooleanRed = false;
+                aBooleanGreen = false;
+                aBooleanBlue = true;
+                aBooleanYellow = false;
+                aBooleanPink = false;
+                red = 255;
+                green = 192;
+                blue = 203;
+                editor.putInt("pink_red", 255);
+                editor.putInt("pink_green", 192);
+                editor.putInt("pink_blue", 203);
+                editor.putBoolean("aBooleanRed", aBooleanRed);
+                editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                editor.putBoolean("aBooleanPink", aBooleanPink);
+                editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                editor.commit();
+            } else {
+                if (MyService.aBoolean_Img_green == true) {
+
+                    red = 0;
+                    green = 255;
+                    blue = 0;
+                    alpha = btn_seekBar.getProgress();
+                    btn_green.setBackgroundResource(R.drawable.custom_button_1);
+                    Intent intentProgress = new Intent("color_progress");
+                    intentProgress.putExtra("key_color", alpha);
+                    intentProgress.putExtra("key_color_red", red);
+                    intentProgress.putExtra("key_color_green", green);
+                    intentProgress.putExtra("key_color_blue", blue);
+                    sendBroadcast(intentProgress);
+                    //  btn_green.setBackgroundResource(R.drawable.custom_button);
+                    btn_blue.setBackgroundResource(R.drawable.custom_button);
+                    btn_pink.setBackgroundResource(R.drawable.custom_button);
+                    btn_red.setBackgroundResource(R.drawable.custom_button);
+                    btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                    aBooleanRed = false;
+                    aBooleanGreen = true;
+                    aBooleanBlue = false;
+                    aBooleanPink = false;
+                    aBooleanYellow = false;
+                    editor.putInt("blue_red", 0);
+                    editor.putInt("blue_green", 0);
+                    editor.putInt("blue_blue", 255);
+                    editor.putBoolean("aBooleanRed", aBooleanRed);
+                    editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                    editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                    editor.putBoolean("aBooleanPink", aBooleanPink);
+                    editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                    editor.commit();
+                } else {
+                    if (MyService.aBoolean_Img_red == true) {
+                        red = 255;
+                        green = 0;
+                        blue = 0;
+                        alpha = btn_seekBar.getProgress();
+                        Intent intentProgress = new Intent("color_progress");
+                        intentProgress.putExtra("key_color", alpha);
+                        intentProgress.putExtra("key_color_red", red);
+                        intentProgress.putExtra("key_color_green", green);
+                        intentProgress.putExtra("key_color_blue", blue);
+                        sendBroadcast(intentProgress);
+                        btn_green.setBackgroundResource(R.drawable.custom_button);
+                        btn_blue.setBackgroundResource(R.drawable.custom_button);
+                        btn_pink.setBackgroundResource(R.drawable.custom_button);
+                        btn_red.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        aBooleanRed = true;
+                        aBooleanGreen = false;
+                        aBooleanPink = false;
+                        aBooleanBlue = false;
+                        aBooleanYellow = false;
+                        red = 255;
+                        green = 0;
+                        blue = 0;
+                        editor.putBoolean("aBooleanRed", aBooleanRed);
+                        editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                        editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                        editor.putBoolean("aBooleanPink", aBooleanPink);
+                        editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                        editor.commit();
+                    } else {
+                        if (MyService.aBoolean_Img_yellow == true) {
+                            blue = 0;
+                            red = 255;
+                            green = 255;
+                            alpha = btn_seekBar.getProgress();
+                            btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                            Intent intentProgress = new Intent("color_progress");
+                            intentProgress.putExtra("key_color", alpha);
+                            intentProgress.putExtra("key_color_red", red);
+                            intentProgress.putExtra("key_color_green", green);
+                            intentProgress.putExtra("key_color_blue", blue);
+                            sendBroadcast(intentProgress);
+
+                            btn_green.setBackgroundResource(R.drawable.custom_button);
+                            btn_blue.setBackgroundResource(R.drawable.custom_button);
+                            btn_pink.setBackgroundResource(R.drawable.custom_button);
+                            btn_red.setBackgroundResource(R.drawable.custom_button);
+                            btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                            aBooleanYellow = true;
+                            aBooleanBlue = false;
+                            aBooleanGreen = false;
+                            aBooleanPink = false;
+                            aBooleanRed = false;
+                            blue = 0;
+                            red = 255;
+                            green = 255;
+                            editor.putInt("yellow_red", 255);
+                            editor.putInt("yellow_green", 255);
+                            editor.putInt("yellow_blue", 0);
+                            editor.putBoolean("aBooleanRed", aBooleanRed);
+                            editor.putBoolean("aBooleanBlue", aBooleanBlue);
+                            editor.putBoolean("aBooleanGreen", aBooleanGreen);
+                            editor.putBoolean("aBooleanPink", aBooleanPink);
+                            editor.putBoolean("aBooleanYellow", aBooleanYellow);
+                            editor.commit();
+
+                        } else {
+
+                        }
+                    }
+                }
+            }
+        }
+
         super.onResume();
+
+
         // DieuKien();
+
     }
 
     private void DieuKien() {
@@ -831,5 +1409,40 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.custom_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.information:
+                //  onClickAutoNight();
+
+                break;
+//            case R.id.eyes:
+//                if (aBooleanEyes==false){
+//                    aBooleanEyes=true;
+//
+//
+//                    item.setIcon(R.drawable.hide);
+//                    Intent intent = new Intent("hideEyes");
+//                    sendBroadcast(intent);
+//                }else {
+//                    aBooleanEyes=false;
+//                    item.setIcon(R.drawable.view);
+//                }
+//
+//                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
+
 

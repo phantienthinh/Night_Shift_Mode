@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<item android:id="@+id/eyes"-->
+        <!--android:icon="@drawable/hide"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="auto_night" />-->
+    <item android:id="@+id/information"
+    android:icon="@drawable/information"
+    app:showAsAction="ifRoom"
+    android:title="auto_night" />
+
+</menu>

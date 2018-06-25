@@ -1,5 +1,8 @@
 package com.example.tienthinh.nightshiftmode;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,15 +11,22 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 
 import java.util.Calendar;
 
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
 import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE;
@@ -27,9 +37,19 @@ import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
 public class MyService extends Service {
     //   private WindowManager.LayoutParams layoutParams;
+    public static Boolean aBoolean_Img_pink =false;
+    public static Boolean aBoolean_Img_red =false;
+    public static Boolean aBoolean_Img_blue =false;
+    public static Boolean aBoolean_Img_yellow =false;
+    public static Boolean aBoolean_Img_green =false;
+    private NotificationCompat.Builder builder;
+    private RemoteViews remoteViews;
+    private NotificationManager notificationManager;
+    private Notification notification;
     int realWidth;
     int realHeight;
     int hour, minute;
+    int tr;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editorSv;
     private String SHARED_PREFERENCES_NAME_SerVice;
@@ -49,6 +69,9 @@ public class MyService extends Service {
     private boolean aBoolean_green = false;
     private boolean aBoolean_yellow = false;
     private boolean aBoolean_pink = false;
+    private Sensor sensor;
+    private SensorManager sensorManager;
+    private SensorEventListener sensorEventListener;
 
 
     public MyService() {
@@ -186,13 +209,29 @@ public class MyService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId){
 
-        if (MainActivity.hour == 0) {
+//        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+//        sensor= sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+
+
+
+
+
+
+        if (MainActivity.hour == 0&&MainActivity.minute==0) {
 
         } else {
             editorSv.putInt("hour", MainActivity.hour);
             editorSv.putInt("minute", MainActivity.minute);
+            editorSv.commit();
+        }
+        if (MainActivity.hour1==0&&MainActivity.phut1==0){
+
+        }else {
+            editorSv.putInt("hour1",MainActivity.hour1);
+            editorSv.putInt("phut1",MainActivity.phut1);
             editorSv.commit();
         }
 
@@ -208,7 +247,7 @@ public class MyService extends Service {
                         WindowManager.LayoutParams.MATCH_PARENT);
         relativeLayout.setLayoutParams(RLlayoutParams);
 
-        color = Color.argb(alpha, red, green, blue);
+        color = Color.argb(alpha,MainActivity.red, MainActivity.green,MainActivity.blue);
 
 
 //        int flags1 = View.SYSTEM_UI_FLAG_IMMERSIVE
@@ -236,14 +275,32 @@ public class MyService extends Service {
         params.width = sharedPreferences.getInt("width", WindowManager.LayoutParams.MATCH_PARENT);
         params.height = sharedPreferences.getInt("height", WindowManager.LayoutParams.MATCH_PARENT)+200;
         Log.d("width,height", params.width + "height" + params.height + "");
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+
+        if (Build.VERSION.SDK_INT >= 26){
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+
+            //params.flags =WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+//            params.flags =WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+//            params.flags =WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+            params.flags =WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+            params.flags =WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+           // params.flags =WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+//                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        }
 //        params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+//        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
 //        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
 //        params.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN;
 //        params.flags = SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | SYSTEM_UI_FLAG_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE
 //                | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         params.flags =getSystemUiVisibility();
+       // params.flags =WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+//        params.flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         params.format = PixelFormat.TRANSLUCENT;
+
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -255,15 +312,23 @@ public class MyService extends Service {
                         aBoolean_green = false;
                         aBoolean_yellow = false;
                         aBoolean_pink = false;
-                        red = intent.getExtras().getInt("key_color_red");
+                        red = intent.getIntExtra("key_color_red",0);
+                        green=0;
+                        blue=0;
                         color = Color.argb(MainActivity.alpha, red, 0, 0);
                         relativeLayout.setBackgroundColor(color);
-                        editorSv.putInt("red", red);
+                        editorSv.putInt("red",MainActivity.red);
                         editorSv.putInt("green", 0);
                         editorSv.putInt("blue", 0);
                         editorSv.putInt("red_alpha", MainActivity.alpha);
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
                         editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
+
                         break;
                     case "color_yellow":
                         aBoolean_progress = false;
@@ -272,16 +337,22 @@ public class MyService extends Service {
                         aBoolean_green = false;
                         aBoolean_yellow = true;
                         aBoolean_pink = false;
-                        red = intent.getExtras().getInt("key_color_yellow_red");
-                        green = intent.getExtras().getInt("key_color_yellow_green");
+                        blue=0;
+                        red = intent.getIntExtra("key_color_yellow_red",0);
+                        green = intent.getIntExtra("key_color_yellow_green",0);
                         color = Color.argb(MainActivity.alpha, red, green, 0);
                         relativeLayout.setBackgroundColor(color);
 
-                        editorSv.putInt("yellow_red", red);
-                        editorSv.putInt("yellow_green", green);
+                        editorSv.putInt("yellow_red", MainActivity.red);
+                        editorSv.putInt("yellow_green",MainActivity.green);
                         editorSv.putInt("yellow_blue", 0);
                         editorSv.putInt("yellow_alpha", MainActivity.alpha);
                         editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
                         break;
                     case "color_blue":
@@ -291,14 +362,21 @@ public class MyService extends Service {
                         aBoolean_green = false;
                         aBoolean_yellow = false;
                         aBoolean_pink = false;
-                        blue = intent.getExtras().getInt("key_color_blue", 0);
+                        red= 0;
+                        green=0;
+                        blue = intent.getIntExtra("key_color_blue", 0);
                         color = Color.argb(MainActivity.alpha, 0, 0, blue);
                         relativeLayout.setBackgroundColor(color);
-                        editorSv.putInt("blue_blue", blue);
+                        editorSv.putInt("blue_blue",MainActivity.blue);
                         editorSv.putInt("blue_red", 0);
                         editorSv.putInt("blue_green", 0);
                         editorSv.putInt("blue_alpha", MainActivity.alpha);
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
                         editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
                         break;
                     case "color_green":
@@ -308,14 +386,23 @@ public class MyService extends Service {
                         aBoolean_green = true;
                         aBoolean_yellow = false;
                         aBoolean_pink = false;
-                        green = intent.getExtras().getInt("key_color_green", 0);
+                        red = 0;
+                        blue=0;
+                       // green = intent.getIntExtra("key_color_green", 0);
+                      //  green = intent.getIntExtra("key_color_green", 0);
+                        green = intent.getIntExtra("key_color_green", 0);
                         color = Color.argb(MainActivity.alpha, 0, green, 0);
                         relativeLayout.setBackgroundColor(color);
-                        editorSv.putInt("green_green", green);
+                        editorSv.putInt("green_green",MainActivity.green);
                         editorSv.putInt("green_red", 0);
                         editorSv.putInt("green_blue", 0);
                         editorSv.putInt("green_alpha", MainActivity.alpha);
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
                         editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
                         break;
                     case "color_pink":
@@ -326,17 +413,22 @@ public class MyService extends Service {
                         aBoolean_yellow = false;
                         aBoolean_pink = true;
                         //alpha = intent.getIntExtra("key_color", 0);
-                        blue = intent.getExtras().getInt("key_color_pink_blue", 0);
-                        green = intent.getExtras().getInt("key_color_pink_green", 0);
-                        red = intent.getExtras().getInt("key_color_pink_red", 0);
+                        blue = intent.getIntExtra("key_color_pink_blue", 0);
+                        green = intent.getIntExtra("key_color_pink_green", 0);
+                        red = intent.getIntExtra("key_color_pink_red", 0);
                         //SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES_NAME,MODE_PRIVATE);
                         color = Color.argb(MainActivity.alpha, red, green, blue);
                         relativeLayout.setBackgroundColor(color);
-                        editorSv.putInt("pink_blue", blue);
-                        editorSv.putInt("pink_green", green);
-                        editorSv.putInt("pink_red", red);
+                        editorSv.putInt("pink_blue",MainActivity.blue);
+                        editorSv.putInt("pink_green",MainActivity.green);
+                        editorSv.putInt("pink_red",MainActivity.red);
                         editorSv.putInt("pink_alpha", MainActivity.alpha);
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
                         editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
                         break;
                     case "color_progress":
@@ -344,7 +436,7 @@ public class MyService extends Service {
                         aBoolean_red = false;
                         aBoolean_blue = false;
                         aBoolean_green = false;
-                        aBoolean_yellow = true;
+                        aBoolean_yellow = false;
                         aBoolean_pink = false;
                         blue = intent.getIntExtra("key_color_blue", 0);
                         green = intent.getIntExtra("key_color_green", 0);
@@ -354,10 +446,15 @@ public class MyService extends Service {
 //                        params.width = MainActivity.width;
 //                        params.height = MainActivity.height;
 
-                        editorSv.putInt("color_r", red);
+                        editorSv.putInt("color_r",red);
                         editorSv.putInt("color_g", green);
                         editorSv.putInt("color_b", blue);
                         editorSv.putInt("alpha", alpha);
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
                         editorSv.putBoolean("aboolean_progress", aBoolean_progress);
                         editorSv.commit();
                         Log.d("456", "r,g,b" + red + green + blue);
@@ -370,9 +467,205 @@ public class MyService extends Service {
                         red = intent.getIntExtra("intentProgress_red", 0);
                         color = Color.argb(MainActivity.alpha, red, green, blue);
                         relativeLayout.setBackgroundColor(color);
-
                         break;
-
+                    case "sendAction1":
+                        MainActivity.alpha = 200;
+                       // color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction2":
+                        MainActivity.alpha = 180;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction3":
+                        MainActivity.alpha = 160;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction4":
+                        MainActivity.alpha = 140;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction5":
+                        MainActivity.alpha = 120;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction6":
+                        MainActivity.alpha = 100;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction7":
+                        MainActivity.alpha = 80;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction8":
+                        MainActivity.alpha = 60;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction9":
+                        MainActivity.alpha = 40;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction10":
+                        MainActivity.alpha = 20;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction11":
+                        MainActivity.alpha = 10;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "sendAction12":
+                        MainActivity.alpha = 0;
+//                        color = Color.argb(MainActivity.alpha,red,green,blue);
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "img_pink":
+                        aBoolean_Img_pink =true;
+                        MainActivity.red = 255;
+                        MainActivity.green = 192;
+                        MainActivity.blue=203;
+                        aBoolean_progress = false;
+                        aBoolean_red = false;
+                        aBoolean_blue = false;
+                        aBoolean_green = false;
+                        aBoolean_yellow = false;
+                        aBoolean_pink = true;
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
+                        editorSv.commit();
+                        color=Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        aBoolean_Img_pink =true;
+                        aBoolean_Img_red =false;
+                        aBoolean_Img_blue =false;
+                        aBoolean_Img_yellow =false;
+                        aBoolean_Img_green =false;
+                        break;
+                    case "img_green":
+                        MainActivity.red = 0;
+                        MainActivity.green = 255;
+                        MainActivity.blue=0;
+                        aBoolean_progress = false;
+                        aBoolean_red = false;
+                        aBoolean_blue = false;
+                        aBoolean_green = true;
+                        aBoolean_yellow = false;
+                        aBoolean_pink = false;
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
+                        editorSv.commit();
+                        color=Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        aBoolean_Img_pink =false;
+                        aBoolean_Img_red =false;
+                        aBoolean_Img_blue =false;
+                        aBoolean_Img_yellow =false;
+                        aBoolean_Img_green =true;
+                        break;
+                    case "img_blue":
+                        MainActivity.red = 0;
+                        MainActivity.green = 0;
+                        MainActivity.blue=255;
+                        aBoolean_progress = false;
+                        aBoolean_red = false;
+                        aBoolean_blue = true;
+                        aBoolean_green = false;
+                        aBoolean_yellow = false;
+                        aBoolean_pink = false;
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
+                        editorSv.commit();
+                        color=Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        aBoolean_Img_pink =false;
+                        aBoolean_Img_red =false;
+                        aBoolean_Img_blue =true;
+                        aBoolean_Img_yellow =false;
+                        aBoolean_Img_green =false;
+                        break;
+                    case "img_yellow":
+                        MainActivity.red = 255;
+                        MainActivity.green = 255;
+                        MainActivity.blue=0;
+                        aBoolean_progress = false;
+                        aBoolean_red = false;
+                        aBoolean_blue = false;
+                        aBoolean_green = false;
+                        aBoolean_yellow = true;
+                        aBoolean_pink = false;
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
+                        editorSv.commit();
+                        color=Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        aBoolean_Img_pink =false;
+                        aBoolean_Img_red =false;
+                        aBoolean_Img_blue =false;
+                        aBoolean_Img_yellow =true;
+                        aBoolean_Img_green =false;
+                        break;
+                    case "img_red":
+                        MainActivity.red = 255;
+                        MainActivity.green = 0;
+                        MainActivity.blue=0;
+                        aBoolean_progress = false;
+                        aBoolean_red = true;
+                        aBoolean_blue = false;
+                        aBoolean_green = false;
+                        aBoolean_yellow = false;
+                        aBoolean_pink = false;
+                        editorSv.putBoolean("aboolean_yellow", aBoolean_yellow);
+                        editorSv.putBoolean("aboolean_pink", aBoolean_pink);
+                        editorSv.putBoolean("aboolean_red", aBoolean_red);
+                        editorSv.putBoolean("aboolean_green", aBoolean_green);
+                        editorSv.putBoolean("aboolean_blue", aBoolean_blue);
+                        editorSv.putBoolean("aboolean_progress", aBoolean_progress);
+                        editorSv.commit();
+                        color=Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        aBoolean_Img_pink =false;
+                        aBoolean_Img_red =true;
+                        aBoolean_Img_blue =false;
+                        aBoolean_Img_yellow =false;
+                        aBoolean_Img_green =false;
+                        break;
                 }
             }
         };
@@ -384,12 +677,33 @@ public class MyService extends Service {
         filter.addAction("color_yellow");
         filter.addAction("color_progress");
         filter.addAction("intentProgress");
+        filter.addAction("sendAction1");
+        filter.addAction("sendAction2");
+        filter.addAction("sendAction3");
+        filter.addAction("sendAction4");
+        filter.addAction("sendAction5");
+        filter.addAction("sendAction6");
+        filter.addAction("sendAction7");
+        filter.addAction("sendAction8");
+        filter.addAction("sendAction9");
+        filter.addAction("sendAction10");
+        filter.addAction("sendAction11");
+        filter.addAction("sendAction12");
+        filter.addAction("img_pink");
+        filter.addAction("img_red");
+        filter.addAction("img_green");
+        filter.addAction("img_yellow");
+        filter.addAction("img_blue");
         //   filter.addAction("toggleButton_on");
         // filter.addAction("toggleButton_off");
         getBaseContext().registerReceiver(receiver, filter);
-
+        KhoiTaoNoification();
+        startForeground(1998,notification);
         startTimerThread();
-        wm.addView(relativeLayout, params);
+
+            wm.addView(relativeLayout, params);
+
+
         Log.d("q", color + "");
         Log.d("create", "khoi tao");
 
@@ -449,7 +763,7 @@ public class MyService extends Service {
 //        }
 
 
-        return START_STICKY;
+        return START_NOT_STICKY;
 
     }
 
@@ -471,7 +785,7 @@ public class MyService extends Service {
                             int p = calendar.get(Calendar.MINUTE);
                             Log.e("hour", "h" + h + "p" + p + "hour" + hour + "minute" + minute);
 
-                            if (h == MainActivity.hour && p == MainActivity.minute) {
+                            if (h == hour && p ==minute) {
                                 try {
                                     Log.e("qq", "vao roi");
                                     wm.addView(relativeLayout, params);
@@ -543,9 +857,6 @@ public class MyService extends Service {
     }
 
     public void conditionProgress() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
                     try {
                         wm.removeView(relativeLayout);
                     } catch (Exception e) {
@@ -565,19 +876,10 @@ public class MyService extends Service {
 
 
                 }
-            } else {
 
-            }
-        } else {
 
-        }
-    }
 
     public void conditionGreen() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    wm.removeView(relativeLayout);
                     try {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
@@ -592,20 +894,10 @@ public class MyService extends Service {
                     relativeLayout.setBackgroundColor(color);
 
 
-                }
-            } else {
-
-            }
-        } else {
-
-        }
     }
 
     public void conditionYellow() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    wm.removeView(relativeLayout);
+
                     try {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
@@ -620,20 +912,12 @@ public class MyService extends Service {
                     relativeLayout.setBackgroundColor(color);
 
 
-                }
-            } else {
 
-            }
-        } else {
-
-        }
     }
 
     public void conditionPink() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    wm.removeView(relativeLayout);
+
+
                     try {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
@@ -648,20 +932,10 @@ public class MyService extends Service {
                     relativeLayout.setBackgroundColor(color);
 
 
-                }
-            } else {
-
-            }
-        } else {
-
-        }
     }
 
     public void conditionBlue() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    wm.removeView(relativeLayout);
+
                     try {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
@@ -676,20 +950,10 @@ public class MyService extends Service {
                     relativeLayout.setBackgroundColor(color);
 
 
-                }
-            } else {
-
-            }
-        } else {
-
-        }
     }
 
     public void conditionRed() {
-        if (red == 0) {
-            if (green == 0) {
-                if (blue == 0) {
-                    wm.removeView(relativeLayout);
+
                     try {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
@@ -704,19 +968,100 @@ public class MyService extends Service {
                     relativeLayout.setBackgroundColor(color);
 
 
-                }
-            } else {
 
-            }
-        } else {
-
-        }
     }
 
     public int getSystemUiVisibility() {
         return View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+   //             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+    }
+    private void KhoiTaoNoification() {
+        builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.moon1)
+                .setVisibility(VISIBILITY_PUBLIC)
+                .setContentTitle("Ứng dụng đã được bật");
+
+
+         notification = builder.build();
+        remoteViews = new RemoteViews(getPackageName(), R.layout.custom_noification);
+        int notificationId = 1998;
+
+        notification.contentView = remoteViews;
+        notification.flags = Notification.FLAG_NO_CLEAR;
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        //sự kiện bấm vào pink trên notification
+        String pink = "img_pink";
+        Intent pinkIntent = new Intent(pink);
+        PendingIntent pinkPendingIntent = PendingIntent.getBroadcast(this, 0, pinkIntent, 0);
+        builder.addAction(R.id.img_pink, pink, pinkPendingIntent);
+        builder.setContentIntent(pinkPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_pink, pinkPendingIntent);
+
+        //sự kiện bấm vào green trên notification
+        String green = "img_green";
+        Intent greenIntent = new Intent(green);
+        PendingIntent greenPendingIntent = PendingIntent.getBroadcast(this, 1, greenIntent, 0);
+        builder.addAction(R.id.img_green, green, greenPendingIntent);
+        builder.setContentIntent(greenPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_green, greenPendingIntent);
+
+        //sự kiện bấm vào blue trên notification
+        String blue = "img_blue";
+        Intent blueIntent = new Intent(blue);
+        PendingIntent bluePendingIntent = PendingIntent.getBroadcast(this, 2, blueIntent, 0);
+        builder.addAction(R.id.img_blue, blue, bluePendingIntent);
+        builder.setContentIntent(bluePendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_blue, bluePendingIntent);
+
+        //sự kiện bấm vào red trên notification
+        String red = "img_red";
+        Intent redIntent = new Intent(red);
+        PendingIntent redPendingIntent = PendingIntent.getBroadcast(this, 3, redIntent, 0);
+        builder.addAction(R.id.img_red, red, redPendingIntent);
+        builder.setContentIntent(redPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_red, redPendingIntent);
+
+        //sự kiện bấm vào yellow trên notification
+        String yellow = "img_yellow";
+        Intent yellowIntent = new Intent(yellow);
+        PendingIntent yellowPendingIntent = PendingIntent.getBroadcast(this, 4, yellowIntent, 0);
+        builder.addAction(R.id.img_yellow, yellow, yellowPendingIntent);
+        builder.setContentIntent(yellowPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_yellow, yellowPendingIntent);
+
+        //sự kiện bấm vào setting trên notification
+        String setting = "img_setting";
+        Intent settingIntent = new Intent(this, MainActivity.class);
+        PendingIntent settingPendingIntent = PendingIntent.getActivity(this, 5, settingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.addAction(R.id.img_go_app, setting, settingPendingIntent);
+        builder.setContentIntent(greenPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.img_go_app, settingPendingIntent);
+
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notification);
+
+//        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        builder.setSound(uri);
+
+//        Intent intent = new Intent("img_pink");
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+//        builder.addAction(R.id.img_pink,"img_pink",pendingIntent);
+//        builder.setContentIntent(pendingIntent);
+//        remoteViews.setOnClickPendingIntent(R.id.img_pink,pendingIntent);
+
+
+//
+
+
+//
+//
+//
+//        //notification.contentView = remoteViews;
+//        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+//      //  notificationId++;
+
     }
 }

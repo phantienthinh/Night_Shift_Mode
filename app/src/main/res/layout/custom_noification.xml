@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Ứng Dụng Đã Được Bật"
+    android:textSize="15dp"
+    android:layout_marginLeft="10dp"
+    android:textColor="#100f0f"
+    android:gravity="center|left"
+    />
+    <LinearLayout
+        android:weightSum="6"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/img_red"
+            android:src="@drawable/custom_button_noitification_red"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:background="#fdfdfd"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/img_green"
+            android:src="@drawable/custom_button_noitification_green"
+            android:background="#fdfdfd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/img_blue"
+            android:src="@drawable/custom_button_noitification_blue"
+            android:background="#fdfdfd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/img_pink"
+            android:src="@drawable/custom_button_noitification_pink"
+            android:background="#fdfdfd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/img_yellow"
+            android:src="@drawable/custom_button_noitification_yellow"
+            android:background="#fdfdfd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+
+            android:id="@+id/img_go_app"
+            android:src="@drawable/settings_work_tool"
+            android:background="#fdfdfd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    </LinearLayout>
