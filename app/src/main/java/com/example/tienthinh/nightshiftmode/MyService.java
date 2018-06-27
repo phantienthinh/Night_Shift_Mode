@@ -666,6 +666,18 @@ public class MyService extends Service {
                         aBoolean_Img_yellow =false;
                         aBoolean_Img_green =false;
                         break;
+                    case "setSeekBar":
+                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+                        relativeLayout.setBackgroundColor(color);
+                        break;
+                    case "delete_windows":
+                        try {
+                            wm.removeView(relativeLayout);
+                            Log.e("test1", "onReceive: " );
+                        }catch (Exception e){
+
+                        }
+                        break;
                 }
             }
         };
@@ -694,6 +706,8 @@ public class MyService extends Service {
         filter.addAction("img_green");
         filter.addAction("img_yellow");
         filter.addAction("img_blue");
+        filter.addAction("setSeekBar");
+        filter.addAction("delete_windows");
         //   filter.addAction("toggleButton_on");
         // filter.addAction("toggleButton_off");
         getBaseContext().registerReceiver(receiver, filter);
@@ -710,19 +724,19 @@ public class MyService extends Service {
         if (sharedPreferences.getBoolean("aboolean_progress", false) == true) {
             conditionProgress();
         } else {
-            if (sharedPreferences.getBoolean("aboolean_red", false) == true) {
+            if (sharedPreferences.getBoolean("aBooleanRed", false) == true) {
                 conditionRed();
             } else {
-                if (sharedPreferences.getBoolean("aboolean_green", false) == true) {
+                if (sharedPreferences.getBoolean("aBooleanGreen", false) == true) {
                     conditionGreen();
                 } else {
-                    if (sharedPreferences.getBoolean("aboolean_blue", false) == true) {
+                    if (sharedPreferences.getBoolean("aBooleanBlue", false) == true) {
                         conditionBlue();
                     } else {
-                        if (sharedPreferences.getBoolean("aboolean_pink", false) == true) {
+                        if (sharedPreferences.getBoolean("aBooleanPink", false) == true) {
                             conditionPink();
                         } else {
-                            if (sharedPreferences.getBoolean("aboolean_yellow", false) == true) {
+                            if (sharedPreferences.getBoolean("aBooleanYellow", false) == true) {
                                 conditionYellow();
                             } else {
                             }
@@ -779,16 +793,43 @@ public class MyService extends Service {
                     }
                     handler.post(new Runnable() {
                         public void run() {
+                            if (MainActivity.toggleButton_Services.isChecked()==false){
+                                try {
+                                    wm.removeView(relativeLayout);
+                                }
+                                catch (Exception e){
+
+                                }
+                            }
+                            else {
+
+                            }
 
                             Calendar calendar = Calendar.getInstance();
                             int h = calendar.get(Calendar.HOUR);
                             int p = calendar.get(Calendar.MINUTE);
-                            Log.e("hour", "h" + h + "p" + p + "hour" + hour + "minute" + minute);
+                            int s = calendar.get(Calendar.SECOND);
+                            int giay =5;
+                            Log.e("hour", "h" + h + "p" + p + "hour" + MainActivity.hour + "minute" + MainActivity.minute);
 
-                            if (h == hour && p ==minute) {
+                            if (MainActivity.hour>=12){
+                                MainActivity.hour = MainActivity.hour-12;
+                            }else {
+
+                            }
+                            if (h == MainActivity.hour && p ==MainActivity.minute &&s == giay) {
+                                try {
+                                    wm.removeView(relativeLayout);
+                                    Log.e("test", "run: " );
+                                }catch (Exception e){
+
+                                }
                                 try {
                                     Log.e("qq", "vao roi");
                                     wm.addView(relativeLayout, params);
+                                   editorSv.putBoolean("Toggle_check",true);
+                                   MainActivity.toggleButton_Services.setChecked(true);
+                                   editorSv.commit();
                                 } catch (Exception e) {
 
                                 }
@@ -796,9 +837,19 @@ public class MyService extends Service {
                             } else {
 
                             }
-                            if (h == MainActivity.hour1 && p == MainActivity.phut1) {
+                            if (MainActivity.hour1>=12){
+                                MainActivity.hour1 =MainActivity.hour1-12;
+                            }
+                            else {
+
+                            }
+                            Log.e("q", MainActivity.hour1+"giờ"+MainActivity.phut1+"phút");
+                            if (h == MainActivity.hour1 && p == MainActivity.phut1 && s ==giay) {
                                 try {
                                     wm.removeView(relativeLayout);
+                                    editorSv.putBoolean("Toggle_check",false);
+                                    MainActivity.toggleButton_Services.setChecked(false);
+                                    editorSv.commit();
                                 } catch (Exception e) {
 
                                 }
@@ -958,14 +1009,10 @@ public class MyService extends Service {
                         wm.addView(relativeLayout, params);
                     } catch (Exception e) {
                     }
+                    color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
+        Log.e("conditionRed","vào đến red");
 
-                    color = Color.argb(
-                            sharedPreferences.getInt("red_alpha", 0),
-                            sharedPreferences.getInt("red", 0),
-                            sharedPreferences.getInt("green", 0),
-                            sharedPreferences.getInt("blue", 0)
-                    );
-                    relativeLayout.setBackgroundColor(color);
+        relativeLayout.setBackgroundColor(color);
 
 
 

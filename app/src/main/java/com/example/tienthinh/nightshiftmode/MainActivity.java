@@ -50,6 +50,7 @@ import java.util.Calendar;
 import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 public class MainActivity extends AppCompatActivity {
+    public static boolean start_app=false;
     public static int alpha;
     public static int width;
     public static int height;
@@ -72,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView_btn_1;
     private ImageView imageView_btn_2;
     private ImageView Imv_time;
-    private SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     private View view;
     private String SHARED_PREFERENCES_NAME;
-    private ToggleButton toggleButton_Services;
+    public static ToggleButton toggleButton_Services;
     private ToggleButton toggleButton_CountDown;
     private ToggleButton toggleButton_auto_night;
     private Toolbar toolbar;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean aBooleanToggle = false;
     private boolean aBooleanBackground;
     private boolean aBooleanDieuKien = false;
+    private boolean BooleanSeekbar=false;
     private MyService myService;
     private RadioGroup radioGroup;
     private RadioButton rd_30, rd_60, rd_90, rd_120;
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private Dialog dialog1;
     private TimePicker timePicker;
     private TextView tv_time_start, tv_time_stop;
-    private SharedPreferences.Editor editor;
+    public static SharedPreferences.Editor editor;
     private AlarmManager alarmManager;
     private AlarmManager alarmManager1;
     private PendingIntent pendingIntent;
@@ -143,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
             btn_seekBar.setProgress(sharedPreferences.getInt("progress", 0));
             Log.d("position1", position + "");
         }
+
+
+
         toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
         toggleButton_auto_night.setChecked(sharedPreferences.getBoolean("Toggle_check_auto_night", false));
         Log.e("cl", red + ":" + green + ":" + blue + "");
@@ -459,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
                             sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
-
+                            BooleanSeekbar = true;
 
                             Toast.makeText(MainActivity.this, "Chức năng đã được bật", Toast.LENGTH_SHORT).show();
                             aBooleanDieuKien = true;
@@ -472,9 +477,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
+                    BooleanSeekbar =false;
                     aBooleanDieuKien = false;
                     sensorManager.unregisterListener(sensorEventListener);
                     sensorLight = 0;
+                    alpha = btn_seekBar.getProgress();
+                    Intent intent = new Intent("setSeekBar");
+                    sendBroadcast(intent);
 
                     //c  sensorManager.unregisterListener((SensorEventListener) MainActivity.this,sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY));
                     Toast.makeText(MainActivity.this, "Bạn đã tắt chức năng", Toast.LENGTH_SHORT).show();
@@ -809,6 +818,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickSaveTime() {
+        Log.e("button_service", toggleButton_Services.isChecked()+"");
         if (edt_time.getText().toString().length() == 0) {
             Toast.makeText(MainActivity.this, "Không được để trống thời gian", Toast.LENGTH_SHORT).show();
         } else {
@@ -1072,36 +1082,41 @@ public class MainActivity extends AppCompatActivity {
         btn_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (aBoolean == true) {
-                    Intent intent1 = new Intent(MainActivity.this, MyService.class);
-                    intent1.putExtra("key_color", seekBar.getProgress());
-                    intent1.putExtra("key_color_red", red);
-                    intent1.putExtra("key_color_green", green);
-                    intent1.putExtra("key_color_blue", blue);
-                    Log.e("r,g,b", "r" + red + "g" + green + "b" + blue);
-                    startService(intent1);
-                } else {
+                if (BooleanSeekbar==true){
 
-
-                    alpha = seekBar.getProgress();
-                    Intent intentProgress = new Intent("color_progress");
-                    intentProgress.putExtra("key_color", alpha);
-                    intentProgress.putExtra("key_color_red", red);
-                    intentProgress.putExtra("key_color_green", green);
-                    intentProgress.putExtra("key_color_blue", blue);
-                    sendBroadcast(intentProgress);
-                    if (alpha == 0) {
-                        editor.putInt("progress", btn_seekBar.getProgress());
-                        editor.commit();
-                        sharedPreferences.getInt("progress", 0);
+                }else {
+                    if (aBoolean == true) {
+                        Intent intent1 = new Intent(MainActivity.this, MyService.class);
+                        intent1.putExtra("key_color", seekBar.getProgress());
+                        intent1.putExtra("key_color_red", red);
+                        intent1.putExtra("key_color_green", green);
+                        intent1.putExtra("key_color_blue", blue);
+                        Log.e("r,g,b", "r" + red + "g" + green + "b" + blue);
+                        startService(intent1);
                     } else {
-                        editor.putInt("progress", btn_seekBar.getProgress());
-                        editor.commit();
-                        sharedPreferences.getInt("progress", 0);
+
+
+                        alpha = seekBar.getProgress();
+                        Intent intentProgress = new Intent("color_progress");
+                        intentProgress.putExtra("key_color", alpha);
+                        intentProgress.putExtra("key_color_red", red);
+                        intentProgress.putExtra("key_color_green", green);
+                        intentProgress.putExtra("key_color_blue", blue);
+                        sendBroadcast(intentProgress);
+                        if (alpha == 0) {
+                            editor.putInt("progress", btn_seekBar.getProgress());
+                            editor.commit();
+                            sharedPreferences.getInt("progress", 0);
+                        } else {
+                            editor.putInt("progress", btn_seekBar.getProgress());
+                            editor.commit();
+                            sharedPreferences.getInt("progress", 0);
+
+                        }
 
                     }
-
                 }
+
             }
 
             @Override
@@ -1128,7 +1143,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent intentToggle_off = new Intent("toggleButton_off");
                     sendBroadcast(intentToggle_off);
                     stopService(new Intent(MainActivity.this, MyService.class));
-
+                    Intent intent = new Intent("delete_windows");
+                    sendBroadcast(intent);
 //                    try {
 //                        notificationManager.cancel(1998);
 //                    } catch (Exception e) {
@@ -1154,6 +1170,7 @@ public class MainActivity extends AppCompatActivity {
                    // KhoiTaoNoification();
                 }
                 editor.putBoolean("Toggle_check", toggleButton_Services.isChecked());
+                Log.e("put", toggleButton_Services.isChecked()+"");
                 editor.commit();
 
 
@@ -1177,6 +1194,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.e("bo", MyService.aBoolean_Img_pink + "");
+        Log.e("start_app", start_app+"" );
+       // toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
 
         if (MyService.aBoolean_Img_pink == true) {
             red = 255;
