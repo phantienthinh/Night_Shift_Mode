@@ -1,6 +1,7 @@
 package com.example.tienthinh.nightshiftmode;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -20,6 +21,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
@@ -114,86 +116,6 @@ public class MyService extends Service {
         }
 
 
-//        wm=(WindowManager)getSystemService(WINDOW_SERVICE);
-////        relativeLayout = new RelativeLayout(this);
-////        RelativeLayout.LayoutParams RLlayoutParams = new RelativeLayout.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,
-////                WindowManager.LayoutParams.MATCH_PARENT);
-////        relativeLayout.setLayoutParams(RLlayoutParams);
-////        color = Color.argb(alpha, red,green, blue);
-////
-////        //Intent  intent = new Intent(this,MyService.class);
-//////        Integer so = intent.getIntExtra("key_alpha",se\);
-//////        Log.d("alpha", String.valueOf(so));
-////      // color = Color.argb(alpha,238 ,232 ,170);
-//////        relativeLayout.setBackgroundColor(color);
-////
-////       // WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-////
-////        params = new WindowManager.LayoutParams();
-////        params.width=MainActivity.height;
-////        params.height= MainActivity.height;
-////        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-////        params.flags= WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-////        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
-////        params.format=PixelFormat.TRANSLUCENT;
-//
-//        receiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                switch (intent.getAction()){
-//                    case "color_red":
-//                        red =  intent.getExtras().getInt("key_color_red");
-//                        color = Color.argb(alpha,red,0,0);
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                    case "color_yellow":
-//                        red = intent.getExtras().getInt("key_color_yellow_red");
-//                        green = intent.getExtras().getInt("key_color_yellow_green");
-//                        color = Color.argb(alpha,red,green,0);
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                    case "color_blue":
-//                        blue = intent.getExtras().getInt("key_color_blue",0);
-//                        color = Color.argb(alpha,0,0,blue);
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                    case "color_green":
-//                        green = intent.getExtras().getInt("key_color_green",0);
-//                        color = Color.argb(alpha,0,green,0);
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                    case "color_pink":
-//                        blue = intent.getExtras().getInt("key_color_pink_blue",0);
-//                        green = intent.getExtras().getInt("key_color_pink_green",0);
-//                        red = intent.getExtras().getInt("key_color_pink_red",0);
-//                        color = Color.argb(alpha,red,green,blue);
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                    case "color_progress":
-//                        blue = intent.getIntExtra("key_color_blue",0);
-//                        green = intent.getIntExtra("key_color_green",0);
-//                        red = intent.getIntExtra("key_color_red",0);
-//                        alpha = intent.getIntExtra("key_color",0);
-//                        color = Color.argb(MainActivity.alpha, red,green, blue);
-//                        params.width=MainActivity.width;
-//                        params.height=MainActivity.height;
-//                        relativeLayout.setBackgroundColor(color);
-//                        break;
-//                }
-//            }
-//        };
-//        filter = new IntentFilter();
-//        filter.addAction("color_red");
-//        filter.addAction("color_pink");
-//        filter.addAction("color_green");
-//        filter.addAction("color_blue");
-//        filter.addAction("color_yellow");
-//        filter.addAction("color_progress");
-//        getBaseContext().registerReceiver(receiver, filter);
-////        wm.addView(relativeLayout,params);
-//
-
-
     }
 
     @Override
@@ -210,9 +132,6 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-
-//        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-//        sensor= sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
 
 
@@ -240,7 +159,6 @@ public class MyService extends Service {
         minute = sharedPreferences.getInt("minute", 0);
 
 
-        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         relativeLayout = new RelativeLayout(this);
         RelativeLayout.LayoutParams RLlayoutParams =
                 new RelativeLayout.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,
@@ -276,30 +194,23 @@ public class MyService extends Service {
         params.height = sharedPreferences.getInt("height", WindowManager.LayoutParams.MATCH_PARENT)+200;
         Log.d("width,height", params.width + "height" + params.height + "");
 
-        if (Build.VERSION.SDK_INT >= 26){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE|SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            |SYSTEM_UI_FLAG_IMMERSIVE_STICKY|SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
-            //params.flags =WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
-//            params.flags =WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
-//            params.flags =WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-            params.flags =WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-            params.flags =WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-           // params.flags =WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-//                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         } else {
+
             params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+            params.flags =WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+           |SYSTEM_UI_FLAG_LAYOUT_STABLE ;
+
+
         }
-//        params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-//        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
-//        params.flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
-//        params.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//        params.flags = SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | SYSTEM_UI_FLAG_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE
-//                | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        params.flags =getSystemUiVisibility();
-       // params.flags =WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-//        params.flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
-//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+
+
         params.format = PixelFormat.TRANSLUCENT;
+        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         receiver = new BroadcastReceiver() {
             @Override
@@ -388,8 +299,6 @@ public class MyService extends Service {
                         aBoolean_pink = false;
                         red = 0;
                         blue=0;
-                       // green = intent.getIntExtra("key_color_green", 0);
-                      //  green = intent.getIntExtra("key_color_green", 0);
                         green = intent.getIntExtra("key_color_green", 0);
                         color = Color.argb(MainActivity.alpha, 0, green, 0);
                         relativeLayout.setBackgroundColor(color);
@@ -713,9 +622,18 @@ public class MyService extends Service {
         getBaseContext().registerReceiver(receiver, filter);
         KhoiTaoNoification();
         startForeground(1998,notification);
-        startTimerThread();
 
+        startTimerThread();
+//            relativeLayout.setClickable(false);
+//            relativeLayout.setFocusable(true);
+
+        try {
             wm.addView(relativeLayout, params);
+        }catch (Exception e){
+
+        }
+
+
 
 
         Log.d("q", color + "");
@@ -1018,16 +936,19 @@ public class MyService extends Service {
 
     }
 
-    public int getSystemUiVisibility() {
-        return View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-   //             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-    }
+//    public int getSystemUiVisibility() {
+//
+//        return View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM.FLAG_NOT_TOUCH_MODAL;
+//   //             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+//    }
     private void KhoiTaoNoification() {
+        String channelId = "channel-01";
         builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.moon1)
                 .setVisibility(VISIBILITY_PUBLIC)
+                .setChannelId(channelId)
                 .setContentTitle("Ứng dụng đã được bật");
 
 
@@ -1038,6 +959,10 @@ public class MyService extends Service {
         notification.contentView = remoteViews;
         notification.flags = Notification.FLAG_NO_CLEAR;
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
+
+
+
+
         //sự kiện bấm vào pink trên notification
         String pink = "img_pink";
         Intent pinkIntent = new Intent(pink);
@@ -1088,6 +1013,16 @@ public class MyService extends Service {
 
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        String channelName ="Channel Name";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+
         notificationManager.notify(notificationId, notification);
 
 //        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

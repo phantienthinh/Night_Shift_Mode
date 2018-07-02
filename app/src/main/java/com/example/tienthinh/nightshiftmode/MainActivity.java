@@ -18,6 +18,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RemoteViews;
@@ -50,6 +52,7 @@ import java.util.Calendar;
 import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 public class MainActivity extends AppCompatActivity {
+    private ProgressBar progressBar;
     public static boolean start_app=false;
     public static int alpha;
     public static int width;
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     NotificationCompat.Builder builder;
     int r;
     int position;
+    private Dialog ShowDiaLog;
     private BroadcastReceiver receiver;
     private IntentFilter filter;
     private float sensorLight;
@@ -125,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
         findRealSize(MainActivity.this);
         initView();
         setSupportActionBar(toolbar);
-        permisonAndroid();
+       // permisonAndroid();
+        permisonAndroidTest();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
@@ -377,12 +382,77 @@ public class MainActivity extends AppCompatActivity {
         getBaseContext().registerReceiver(receiver, filter);
     }
 
+    private  void DiaLogShow(){
+        ShowDiaLog = new Dialog(this);
+        ShowDiaLog.setCancelable(false);
+        ShowDiaLog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ShowDiaLog.setContentView(R.layout.dialog_progressbar);
+        ShowDiaLog.show();
+    }
+    private void openSensor(){
+        new AsyncTask<Void,Void,Void>(){
+
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                DiaLogShow();
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                    sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                Toast.makeText(MainActivity.this, "Chức năng đã được bật", Toast.LENGTH_SHORT).show();
+                ShowDiaLog.cancel();
+            }
+        }.execute();
+    }
+
 
     private void permisonAndroid() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 12);
             }
+        }
+    }
+
+    private void permisonAndroidTest(){
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 1234);
+            }
+        }
+        else
+        {
+            Toast.makeText(context, "Vui lòng caaos quyền cho ứng dụng", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==12){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)){
+                    toggleButton_Services.setChecked(false);
+                    editor.putBoolean("Toggle_check", toggleButton_Services.isChecked());
+                    editor.commit();
+                }
+            }
+        } else {
+
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -462,13 +532,11 @@ public class MainActivity extends AppCompatActivity {
                     if (toggleButton_auto_night.isChecked() == false) {
 
                     } else {
-                        if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
-                            sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
-                            BooleanSeekbar = true;
+                   if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
+                       BooleanSeekbar = true;
+                       aBooleanDieuKien = true;
+                       openSensor();
 
-                            Toast.makeText(MainActivity.this, "Chức năng đã được bật", Toast.LENGTH_SHORT).show();
-                            aBooleanDieuKien = true;
-                            //KhoiTaoSensor();
                         } else {
                             toggleButton_auto_night.setChecked(false);
                             Toast.makeText(MainActivity.this, "Xin lỗi!!! điện thoại của bạn không thể sử dụng được chức năng này ",
@@ -1443,32 +1511,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.custom_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.information:
-                //  onClickAutoNight();
-
-                break;
-//            case R.id.eyes:
-//                if (aBooleanEyes==false){
-//                    aBooleanEyes=true;
-//
-//
-//                    item.setIcon(R.drawable.hide);
-//                    Intent intent = new Intent("hideEyes");
-//                    sendBroadcast(intent);
-//                }else {
-//                    aBooleanEyes=false;
-//                    item.setIcon(R.drawable.view);
-//                }
-//
-//                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

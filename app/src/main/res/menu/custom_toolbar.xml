@@ -6,9 +6,9 @@
         <!--android:icon="@drawable/hide"-->
         <!--app:showAsAction="ifRoom"-->
         <!--android:title="auto_night" />-->
-    <item android:id="@+id/information"
-    android:icon="@drawable/information"
-    app:showAsAction="ifRoom"
-    android:title="auto_night" />
+    <!--<item android:id="@+id/information"-->
+    <!--android:icon="@drawable/information"-->
+    <!--app:showAsAction="ifRoom"-->
+    <!--android:title="auto_night" />-->
 
 </menu>

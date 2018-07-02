@@ -10,7 +10,6 @@
     tools:context=".MainActivity">
 
 
-
     <android.support.v7.widget.Toolbar
 
         android:id="@+id/toolbar"
@@ -59,11 +58,13 @@
 
 
             </LinearLayout>
+
             <LinearLayout
-                android:weightSum="5"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,14 +99,13 @@
                     android:weightSum="3">
 
 
-
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:gravity="center|left"
-                        android:layout_marginBottom="10dp"
                         android:text="Điều Chỉnh Độ Mờ"
                         android:textColor="#000000"
                         android:textSize="20dp"
@@ -222,8 +222,8 @@
             android:background="@drawable/custom_image_view"
             android:elevation="4dp"
             android:src="@android:drawable/ic_menu_add" />
-    </RelativeLayout>
 
+    </RelativeLayout>
 
 
 </LinearLayout>
