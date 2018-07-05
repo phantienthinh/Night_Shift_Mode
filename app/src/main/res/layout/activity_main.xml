@@ -4,20 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical"
-
     tools:context=".MainActivity">
-
-
     <android.support.v7.widget.Toolbar
-
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-    </android.support.v7.widget.Toolbar>
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,31 +21,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/_7sdp"
             android:orientation="vertical">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5">
+                android:layout_height="@dimen/_50sdp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_power" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_220sdp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="4"
                     android:gravity="center|left"
-                    android:text="Bật/Tắt"
+                    android:text="@string/on_off"
                     android:textColor="#000"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/_17sdp" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_gravity="center"
                     android:background="@drawable/custom_togen"
                     android:textOff=""
                     android:textOn="" />
@@ -61,35 +61,129 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
+                android:background="#a79e90">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
                 android:orientation="horizontal"
                 android:weightSum="5">
 
+                <ImageView
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_auto" />
+
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_206sdp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center|left"
-                    android:text="Chế Độ Tự Động"
+                    android:text="@string/Text2"
                     android:textColor="#000"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/_17sdp"/>
 
                 <ToggleButton
                     android:id="@+id/toggleButton_auto_night"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_gravity="center"
                     android:background="@drawable/custom_togen"
                     android:textOff=""
                     android:textOn="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#a79e90">
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="7">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:src="@drawable/ic_color" />
+
+                    <TextView
+                        android:layout_width="@dimen/_206sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:gravity="center|left"
+                        android:text="@string/color"
+                        android:textColor="#000"
+                        android:textSize="@dimen/_17sdp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_15sdp">
+
+                    <Button
+                        android:id="@+id/btn_green"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:background="@drawable/ic_green" />
+
+                    <Button
+                        android:id="@+id/btn_yellow"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:background="@drawable/ic_yellow" />
+
+                    <Button
+                        android:id="@+id/btn_red"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:background="@drawable/ic_red" />
+
+                    <Button
+                        android:id="@+id/btn_pink"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:background="@drawable/ic_pink" />
+
+                    <Button
+                        android:id="@+id/btn_blue"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:background="@drawable/ic_blue" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -98,82 +192,45 @@
                     android:orientation="vertical"
                     android:weightSum="3">
 
-
-                    <TextView
-                        android:id="@+id/textView"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center|left"
-                        android:text="Điều Chỉnh Độ Mờ"
-                        android:textColor="#000000"
-                        android:textSize="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/edt_on_off" />
+                        android:layout_height="@dimen/_50sdp">
+                        <ImageView
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:src="@drawable/ic_ajust" />
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:id="@+id/textView"
+                            android:layout_width="@dimen/_220sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:gravity="center|left"
+                            android:text="Điều Chỉnh Độ Mờ"
+                            android:textColor="#000"
+                            android:textSize="@dimen/_18sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/edt_on_off" />
+
+
+                    </LinearLayout>
+
 
                     <SeekBar
                         android:id="@+id/seekBar"
-                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_width="@dimen/_270sdp"
                         android:layout_height="0dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="2"
                         android:max="200"
                         android:theme="@style/MySeekBarTheme" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:orientation="vertical"
-                    android:weightSum="5">
-
-                    <Button
-                        android:id="@+id/btn_green"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_button"
-                        android:text="Green" />
-
-                    <Button
-                        android:id="@+id/btn_yellow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_button"
-                        android:text="Yellow" />
-
-                    <Button
-                        android:id="@+id/btn_red"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_button"
-                        android:text="Red" />
-
-                    <Button
-                        android:id="@+id/btn_pink"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_button"
-                        android:text="pink" />
-
-                    <Button
-                        android:id="@+id/btn_blue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_button"
-                        android:text="Blue" />
                 </LinearLayout>
 
 
@@ -190,9 +247,8 @@
             android:layout_gravity="right"
             android:layout_marginBottom="154dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/custom_image_view"
             android:elevation="5dp"
-            android:src="@drawable/halloween" />
+            android:src="@drawable/ic_date" />
 
         <ImageView
             android:id="@+id/Imv_time_1"
@@ -204,9 +260,8 @@
             android:layout_gravity="right"
             android:layout_marginBottom="94dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/custom_image_view"
             android:elevation="4dp"
-            android:src="@drawable/clock" />
+            android:src="@drawable/ic_time" />
 
         <ImageView
             android:id="@+id/Imv_time"
@@ -219,9 +274,8 @@
             android:layout_marginBottom="24dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/custom_image_view"
             android:elevation="4dp"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@drawable/ic_add" />
 
     </RelativeLayout>
 

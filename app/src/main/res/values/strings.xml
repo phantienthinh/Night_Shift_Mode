@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Night Shift Mode</string>
     <string name="hello">hello</string>
+    <string name="color">Color</string>
+    <string name="Text2">Chế Độ Tự Động</string>
+    <string name="on_off">Bật/Tắt</string>
 </resources>

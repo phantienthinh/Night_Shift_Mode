@@ -378,67 +378,31 @@ public class MyService extends Service {
                         relativeLayout.setBackgroundColor(color);
                         break;
                     case "sendAction1":
-                        MainActivity.alpha = 200;
+                        MainActivity.alpha = 150;
                        // color = Color.argb(MainActivity.alpha,red,green,blue);
                         color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
                         relativeLayout.setBackgroundColor(color);
                         break;
                     case "sendAction2":
-                        MainActivity.alpha = 180;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction3":
-                        MainActivity.alpha = 160;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction4":
-                        MainActivity.alpha = 140;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction5":
                         MainActivity.alpha = 120;
 //                        color = Color.argb(MainActivity.alpha,red,green,blue);
                         color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
                         relativeLayout.setBackgroundColor(color);
                         break;
-                    case "sendAction6":
-                        MainActivity.alpha = 100;
+                    case "sendAction3":
+                        MainActivity.alpha = 90;
 //                        color = Color.argb(MainActivity.alpha,red,green,blue);
                         color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
                         relativeLayout.setBackgroundColor(color);
                         break;
-                    case "sendAction7":
-                        MainActivity.alpha = 80;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction8":
+                    case "sendAction4":
                         MainActivity.alpha = 60;
 //                        color = Color.argb(MainActivity.alpha,red,green,blue);
                         color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
                         relativeLayout.setBackgroundColor(color);
                         break;
-                    case "sendAction9":
-                        MainActivity.alpha = 40;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction10":
-                        MainActivity.alpha = 20;
-//                        color = Color.argb(MainActivity.alpha,red,green,blue);
-                        color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
-                        relativeLayout.setBackgroundColor(color);
-                        break;
-                    case "sendAction11":
-                        MainActivity.alpha = 10;
+                    case "sendAction5":
+                        MainActivity.alpha = 30;
 //                        color = Color.argb(MainActivity.alpha,red,green,blue);
                         color = Color.argb(MainActivity.alpha,MainActivity.red,MainActivity.green,MainActivity.blue);
                         relativeLayout.setBackgroundColor(color);

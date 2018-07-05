@@ -4,21 +4,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:gravity="center"
     android:layout_height="match_parent">
-    <FrameLayout
-        android:background="#000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp">
 
-    </FrameLayout>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Ứng Dụng Đã Được Bật"
-    android:textSize="15dp"
-    android:layout_marginLeft="10dp"
-    android:textColor="#100f0f"
-    android:gravity="center|left"
-    />
+        <ImageView
+            android:padding="@dimen/_5sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_laucher"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="@dimen/_230sdp"
+            android:layout_height="wrap_content"
+            android:text="Ứng Dụng Đã Được Bật"
+            android:textSize="@dimen/_16sdp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#100f0f"
+            android:gravity="center|left"
+            />
+        <ImageButton
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:id="@+id/img_go_app"
+            android:background="@drawable/ic_setting"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp" />
+    </LinearLayout>
+
     <LinearLayout
         android:padding="8dp"
         android:weightSum="6"
@@ -26,48 +41,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageButton
+            android:layout_marginLeft="@dimen/_20sdp"
             android:id="@+id/img_red"
-            android:src="@drawable/custom_button_noitification_red"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:background="#4af5f0f0"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/ic_red"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
         <ImageButton
+            android:layout_marginLeft="@dimen/_15sdp"
             android:id="@+id/img_green"
-            android:src="@drawable/custom_button_noitification_green"
-            android:background="#4af5f0f0"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/ic_green"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
         <ImageButton
+            android:layout_marginLeft="@dimen/_15sdp"
             android:id="@+id/img_blue"
-            android:src="@drawable/custom_button_noitification_blue"
-            android:background="#4af5f0f0"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/ic_blue"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
         <ImageButton
             android:id="@+id/img_pink"
-            android:src="@drawable/custom_button_noitification_pink"
-            android:background="#4af5f0f0"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:background="@drawable/ic_pink"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
         <ImageButton
+            android:layout_marginLeft="@dimen/_15sdp"
             android:id="@+id/img_yellow"
-            android:src="@drawable/custom_button_noitification_yellow"
-            android:background="#4af5f0f0"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <ImageButton
+            android:background="@drawable/ic_yellow"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
 
-            android:id="@+id/img_go_app"
-            android:src="@drawable/settings_work_tool"
-            android:background="#4af5f0f0"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

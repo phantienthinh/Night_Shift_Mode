@@ -485,13 +485,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
         Imv_time = (ImageView) findViewById(R.id.Imv_time);
         btn_blue = findViewById(R.id.btn_blue);
         btn_green = findViewById(R.id.btn_green);
         btn_red = findViewById(R.id.btn_red);
         btn_pink = findViewById(R.id.btn_pink);
         btn_yellow = findViewById(R.id.btn_yellow);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         btn_seekBar = (SeekBar) findViewById(R.id.seekBar);
         toggleButton_Services = (ToggleButton) findViewById(R.id.toggleButton);
         imageView_btn_1 = (ImageView) findViewById(R.id.Imv_time_1);
@@ -607,83 +607,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBright() {
-        if (sensorLight > 0 && sensorLight <= 150) {
+        if (sensorLight > 0 && sensorLight <= 200) {
             Intent intent = new Intent("sendAction1");
             sendBroadcast(intent);
         } else {
 
         }
-        if (sensorLight > 150 && sensorLight <= 600) {
+        if (sensorLight > 200 && sensorLight <= 1000) {
             Intent intent = new Intent("sendAction2");
             sendBroadcast(intent);
         } else {
 
         }
-        if (sensorLight > 600 && sensorLight <= 1000) {
+        if (sensorLight > 1000 && sensorLight <= 5000) {
             Intent intent = new Intent("sendAction3");
             sendBroadcast(intent);
         } else {
 
         }
-        if (sensorLight > 1000 && sensorLight <= 1500) {
+        if (sensorLight > 5000 && sensorLight <= 13000) {
             Intent intent = new Intent("sendAction4");
             sendBroadcast(intent);
         } else {
 
         }
-        if (sensorLight > 1500 && sensorLight <= 3000) {
+        if (sensorLight > 13000) {
             Intent intent = new Intent("sendAction5");
             sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 3000 && sensorLight < 5000) {
-            Intent intent = new Intent("sendAction6");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 5000 && sensorLight <= 8000) {
-            Intent intent = new Intent("sendAction7");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 8000 && sensorLight <= 13000) {
-            Intent intent = new Intent("sendAction8");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 13000 && sensorLight <= 18000) {
-            Intent intent = new Intent("sendAction8");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 18000 && sensorLight <= 23000) {
-            Intent intent = new Intent("sendAction9");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 23000 && sensorLight < 26000) {
-            Intent intent = new Intent("sendAction10");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 26000 && sensorLight < 30000) {
-            Intent intent = new Intent("sendAction11");
-            sendBroadcast(intent);
-        } else {
-
-        }
-        if (sensorLight > 30000) {
-            Intent intent = new Intent("sendAction12");
-            sendBroadcast(intent);
-        } else {
-
         }
     }
 
@@ -1248,16 +1198,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void onclickImgGoApp() {
-//        Intent resultIntent = new Intent(this,MainActivity.class);
-//        PendingIntent resultPendingIntent =PendingIntent.getActivity(this
-//                ,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-//        builder.setContentIntent(resultPendingIntent);
-//        notificationManager.notify(notificationId,builder.build());
-
-
-    }
-
 
     @Override
     protected void onResume() {
@@ -1500,19 +1440,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
 
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.custom_toolbar, menu);
-        return super.onCreateOptionsMenu(menu);
-
-    }
-
 
 }
 
