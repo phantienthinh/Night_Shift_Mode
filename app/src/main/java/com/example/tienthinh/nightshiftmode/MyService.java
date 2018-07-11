@@ -10,8 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -19,12 +23,15 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -38,6 +45,8 @@ import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
 
 public class MyService extends Service {
+    private Context context;
+    private Typeface typeface_Bold;
     //   private WindowManager.LayoutParams layoutParams;
     public static Boolean aBoolean_Img_pink =false;
     public static Boolean aBoolean_Img_red =false;
@@ -917,7 +926,12 @@ public class MyService extends Service {
 
 
          notification = builder.build();
+
+         String mau = "#5c5c5c";
+
         remoteViews = new RemoteViews(getPackageName(), R.layout.custom_noification);
+
+
         int notificationId = 1998;
 
         notification.contentView = remoteViews;

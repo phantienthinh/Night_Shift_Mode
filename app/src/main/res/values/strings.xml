@@ -2,6 +2,13 @@
     <string name="app_name">Night Shift Mode</string>
     <string name="hello">hello</string>
     <string name="color">Color</string>
-    <string name="Text2">Chế Độ Tự Động</string>
-    <string name="on_off">Bật/Tắt</string>
+    <string name="Text2">Auto Mode</string>
+    <string name="on_off">On/Off</string>
+    <string name="on_off_notification">Night Shift Mode On</string>
+    <string name="hen_gio">Set time</string>
+    <string name="nhap_so_phut">Time</string>
+    <string name="tu">Start :</string>
+    <string name="den">End :</string>
+    <string name="fonts">SanFranciscoDisplay-Semibold</string>
+    <string name="dieu_chinh_do_mo">Adjust Transparency</string>
 </resources>

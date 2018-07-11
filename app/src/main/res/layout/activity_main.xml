@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"/>
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--app:titleTextColor="#fff"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:minHeight="?attr/actionBarSize"-->
+        <!--android:background="@color/colorPrimary"/>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,21 +32,22 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:src="@drawable/ic_power" />
 
                 <TextView
+                    android:id="@+id/on_off"
                     android:layout_width="@dimen/_220sdp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center|left"
                     android:text="@string/on_off"
                     android:textColor="#000"
-                    android:textSize="@dimen/_17sdp" />
+                    android:textSize="@dimen/_15sdp" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton"
@@ -73,22 +75,23 @@
                 android:weightSum="5">
 
                 <ImageView
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:src="@drawable/ic_auto" />
 
                 <TextView
-                    android:layout_width="@dimen/_206sdp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/auto"
+                    android:layout_width="@dimen/_180sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:gravity="center|left"
                     android:text="@string/Text2"
                     android:textColor="#000"
-                    android:textSize="@dimen/_17sdp"/>
+                    android:textSize="@dimen/_15sdp"/>
 
                 <ToggleButton
                     android:id="@+id/toggleButton_auto_night"
@@ -120,14 +123,15 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:src="@drawable/ic_color" />
 
                     <TextView
+                        android:id="@+id/color"
                         android:layout_width="@dimen/_206sdp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -135,7 +139,7 @@
                         android:gravity="center|left"
                         android:text="@string/color"
                         android:textColor="#000"
-                        android:textSize="@dimen/_17sdp"/>
+                        android:textSize="@dimen/_15sdp"/>
 
                 </LinearLayout>
 
@@ -187,6 +191,13 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#a79e90">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:orientation="vertical"
@@ -197,8 +208,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp">
                         <ImageView
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/_10sdp"
                             android:layout_marginRight="@dimen/_10sdp"
@@ -211,9 +222,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="4"
                             android:gravity="center|left"
-                            android:text="Điều Chỉnh Độ Mờ"
+                            android:text="@string/dieu_chinh_do_mo"
                             android:textColor="#000"
-                            android:textSize="@dimen/_18sdp"
+                            android:textSize="@dimen/_15sdp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/edt_on_off" />
@@ -226,11 +237,16 @@
                         android:id="@+id/seekBar"
                         android:layout_gravity="center"
                         android:layout_width="@dimen/_270sdp"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="2"
+                        android:layout_height="@dimen/_20sdp"
                         android:max="200"
                         android:theme="@style/MySeekBarTheme" />
+                    <TextView
+                        android:textSize="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:textColor="#000"
+                        android:id="@+id/phanTram"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp" />
                 </LinearLayout>
 
 
@@ -261,9 +277,10 @@
             android:layout_marginBottom="94dp"
             android:layout_marginRight="5dp"
             android:elevation="4dp"
-            android:src="@drawable/ic_time" />
+            android:background="@drawable/set_time" />
 
         <ImageView
+            android:visibility="visible"
             android:id="@+id/Imv_time"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -275,7 +292,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:elevation="4dp"
-            android:src="@drawable/ic_add" />
+            android:src="@drawable/button_floatting" />
 
     </RelativeLayout>
 

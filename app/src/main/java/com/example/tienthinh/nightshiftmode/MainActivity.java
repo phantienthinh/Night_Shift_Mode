@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -52,8 +54,14 @@ import java.util.Calendar;
 import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView txt_PhanTram;
+    private TextView txt_on_off,txt_auto,txtopacity,txt_color;
+    private Typeface typeface_Bold ;
+    private Typeface typeface1_Medium;
+    private Typeface typeface2_Regular;
+    private Typeface typeface_Semibold;
     private ProgressBar progressBar;
-    public static boolean start_app=false;
+    public static boolean start_app = false;
     public static int alpha;
     public static int width;
     public static int height;
@@ -94,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean aBooleanToggle = false;
     private boolean aBooleanBackground;
     private boolean aBooleanDieuKien = false;
-    private boolean BooleanSeekbar=false;
+    private boolean BooleanSeekbar = false;
     private MyService myService;
     private RadioGroup radioGroup;
     private RadioButton rd_30, rd_60, rd_90, rd_120;
@@ -126,10 +134,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         findRealSize(MainActivity.this);
         initView();
-        setSupportActionBar(toolbar);
-       // permisonAndroid();
+        khoiTaoFont();
+//        setSupportActionBar(toolbar);
+        // permisonAndroid();
         permisonAndroidTest();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -152,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
         toggleButton_auto_night.setChecked(sharedPreferences.getBoolean("Toggle_check_auto_night", false));
         Log.e("cl", red + ":" + green + ":" + blue + "");
@@ -164,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             green = 0;
             blue = 0;
             alpha = btn_seekBar.getProgress();
-            btn_red.setBackgroundResource(R.drawable.custom_button_1);
+            btn_red.setBackgroundResource(R.drawable.ic_red_click);
             Intent intentProgress = new Intent("color_progress");
             intentProgress.putExtra("key_color", alpha);
             intentProgress.putExtra("key_color_red", red);
@@ -177,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 green = 255;
                 blue = 0;
                 alpha = btn_seekBar.getProgress();
-                btn_green.setBackgroundResource(R.drawable.custom_button_1);
+                btn_green.setBackgroundResource(R.drawable.ic_green_click);
                 Intent intentProgress = new Intent("color_progress");
                 intentProgress.putExtra("key_color", alpha);
                 intentProgress.putExtra("key_color_red", red);
@@ -185,12 +195,12 @@ public class MainActivity extends AppCompatActivity {
                 intentProgress.putExtra("key_color_blue", blue);
                 sendBroadcast(intentProgress);
             } else {
-                if (MyService.aBoolean_Img_pink==true) {
+                if (MyService.aBoolean_Img_pink == true) {
                     red = 255;
                     green = 192;
                     blue = 203;
                     alpha = btn_seekBar.getProgress();
-                    btn_pink.setBackgroundResource(R.drawable.custom_button_1);
+                    btn_pink.setBackgroundResource(R.drawable.ic_pink_click);
                     Intent intentProgress = new Intent("color_progress");
                     intentProgress.putExtra("key_color", alpha);
                     intentProgress.putExtra("key_color_red", red);
@@ -198,12 +208,12 @@ public class MainActivity extends AppCompatActivity {
                     intentProgress.putExtra("key_color_blue", blue);
                     sendBroadcast(intentProgress);
                 } else {
-                    if (MyService.aBoolean_Img_yellow==true) {
+                    if (MyService.aBoolean_Img_yellow == true) {
                         blue = 0;
                         red = 255;
                         green = 255;
                         alpha = btn_seekBar.getProgress();
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow_click);
                         Intent intentProgress = new Intent("color_progress");
                         intentProgress.putExtra("key_color", alpha);
                         intentProgress.putExtra("key_color_red", red);
@@ -211,12 +221,12 @@ public class MainActivity extends AppCompatActivity {
                         intentProgress.putExtra("key_color_blue", blue);
                         sendBroadcast(intentProgress);
                     } else {
-                        if (MyService.aBoolean_Img_blue==true) {
+                        if (MyService.aBoolean_Img_blue == true) {
                             blue = 255;
                             red = 0;
                             green = 0;
                             alpha = btn_seekBar.getProgress();
-                            btn_blue.setBackgroundResource(R.drawable.custom_button_1);
+                            btn_blue.setBackgroundResource(R.drawable.ic_blue_click);
                             Intent intentProgress = new Intent("color_progress");
                             intentProgress.putExtra("key_color", alpha);
                             intentProgress.putExtra("key_color_red", red);
@@ -244,17 +254,35 @@ public class MainActivity extends AppCompatActivity {
         KhoiTaoReceive();
     }
 
+    private void khoiTaoFont() {
+        typeface_Bold = Typeface.createFromAsset(getAssets(), "fonts/SanFranciscoDisplay-Bold.otf");
+
+        typeface1_Medium = Typeface.createFromAsset(getAssets(), "fonts/SanFranciscoDisplay-Medium.otf");
+
+        typeface2_Regular = Typeface.createFromAsset(getAssets(), "fonts/SanFranciscoDisplay-Regular.otf");
+
+        typeface_Semibold = Typeface.createFromAsset(getAssets(), "fonts/SanFranciscoDisplay-Semibold.otf");
+
+        txt_on_off.setTypeface(typeface2_Regular);
+        txtopacity.setTypeface(typeface2_Regular);
+        txt_color.setTypeface(typeface2_Regular);
+        txt_auto.setTypeface(typeface2_Regular);
+    }
+
+
     private void KhoiTaoReceive() {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getAction()) {
                     case "img_pink":
-                        btn_green.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button);
-                        btn_pink.setBackgroundResource(R.drawable.custom_button_1);
-                        btn_red.setBackgroundResource(R.drawable.custom_button);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.ic_green);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink_click);
+                        btn_red.setBackgroundResource(R.drawable.ic_red);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
+
+
                         Log.e("img_pink", "da vao toi day");
                         aBooleanRed = false;
                         aBooleanGreen = false;
@@ -275,11 +303,11 @@ public class MainActivity extends AppCompatActivity {
                         editor.commit();
                         break;
                     case "img_green":
-                        btn_pink.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button);
-                        btn_green.setBackgroundResource(R.drawable.custom_button_1);
-                        btn_red.setBackgroundResource(R.drawable.custom_button);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.ic_green_click);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                        btn_red.setBackgroundResource(R.drawable.ic_red);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                         aBooleanRed = false;
                         aBooleanGreen = true;
                         aBooleanBlue = false;
@@ -299,11 +327,11 @@ public class MainActivity extends AppCompatActivity {
                         editor.commit();
                         break;
                     case "img_blue":
-                        btn_pink.setBackgroundResource(R.drawable.custom_button);
-                        btn_green.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button_1);
-                        btn_red.setBackgroundResource(R.drawable.custom_button);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.ic_green);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue_click);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                        btn_red.setBackgroundResource(R.drawable.ic_red);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                         aBooleanRed = false;
                         aBooleanGreen = false;
                         aBooleanBlue = true;
@@ -323,11 +351,11 @@ public class MainActivity extends AppCompatActivity {
                         editor.commit();
                         break;
                     case "img_red":
-                        btn_pink.setBackgroundResource(R.drawable.custom_button);
-                        btn_green.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button);
-                        btn_red.setBackgroundResource(R.drawable.custom_button_1);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.ic_green);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                        btn_red.setBackgroundResource(R.drawable.ic_red_click);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                         aBooleanRed = true;
                         aBooleanGreen = false;
                         aBooleanBlue = false;
@@ -347,11 +375,11 @@ public class MainActivity extends AppCompatActivity {
                         editor.commit();
                         break;
                     case "img_yellow":
-                        btn_pink.setBackgroundResource(R.drawable.custom_button);
-                        btn_green.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button);
-                        btn_red.setBackgroundResource(R.drawable.custom_button);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                        btn_green.setBackgroundResource(R.drawable.ic_green);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                        btn_red.setBackgroundResource(R.drawable.ic_red);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow_click);
                         aBooleanRed = false;
                         aBooleanGreen = false;
                         aBooleanBlue = false;
@@ -382,15 +410,16 @@ public class MainActivity extends AppCompatActivity {
         getBaseContext().registerReceiver(receiver, filter);
     }
 
-    private  void DiaLogShow(){
+    private void DiaLogShow() {
         ShowDiaLog = new Dialog(this);
         ShowDiaLog.setCancelable(false);
         ShowDiaLog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         ShowDiaLog.setContentView(R.layout.dialog_progressbar);
         ShowDiaLog.show();
     }
-    private void openSensor(){
-        new AsyncTask<Void,Void,Void>(){
+
+    private void openSensor() {
+        new AsyncTask<Void, Void, Void>() {
 
 
             @Override
@@ -402,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                    sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
+                sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), sensorManager.SENSOR_DELAY_FASTEST);
 
                 return null;
             }
@@ -426,25 +455,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void permisonAndroidTest(){
-        if(Build.VERSION.SDK_INT >= 23) {
+    private void permisonAndroidTest() {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
                 startActivityForResult(intent, 1234);
             }
-        }
-        else
-        {
-            Toast.makeText(context, "Vui lòng caaos quyền cho ứng dụng", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, "Vui lòng cấp quyền cho ứng dụng", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==12){
+        if (requestCode == 12) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)){
+                if (!Settings.canDrawOverlays(this)) {
                     toggleButton_Services.setChecked(false);
                     editor.putBoolean("Toggle_check", toggleButton_Services.isChecked());
                     editor.commit();
@@ -485,7 +512,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        txt_PhanTram = findViewById(R.id.phanTram);
+        txt_auto = findViewById(R.id.auto);
+        txt_color = findViewById(R.id.color);
+        txt_on_off=findViewById(R.id.on_off);
+        txtopacity = findViewById(R.id.textView);
+//        toolbar=(Toolbar)findViewById(R.id.toolbar);
         Imv_time = (ImageView) findViewById(R.id.Imv_time);
         btn_blue = findViewById(R.id.btn_blue);
         btn_green = findViewById(R.id.btn_green);
@@ -532,10 +564,10 @@ public class MainActivity extends AppCompatActivity {
                     if (toggleButton_auto_night.isChecked() == false) {
 
                     } else {
-                   if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
-                       BooleanSeekbar = true;
-                       aBooleanDieuKien = true;
-                       openSensor();
+                        if (sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
+                            BooleanSeekbar = true;
+                            aBooleanDieuKien = true;
+                            openSensor();
 
                         } else {
                             toggleButton_auto_night.setChecked(false);
@@ -545,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    BooleanSeekbar =false;
+                    BooleanSeekbar = false;
                     aBooleanDieuKien = false;
                     sensorManager.unregisterListener(sensorEventListener);
                     sensorLight = 0;
@@ -641,6 +673,9 @@ public class MainActivity extends AppCompatActivity {
         Imv_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Imv_time.setBackgroundResource(R.drawable.button_floatting);
+
                 if (aBooleanBackground == false) {
                     aBooleanBackground = true;
                     imageView_btn_1.setVisibility(View.VISIBLE);
@@ -791,6 +826,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.custom_dialog);
         dialog.setCancelable(true);
         dialog.show();
+        TextView txtdialog = dialog.findViewById(R.id.txt_Title_dialog);
+        txtdialog.setTypeface(typeface_Semibold);
 
         toggleButton_CountDown = (ToggleButton) dialog.findViewById(R.id.toggleButton_CountDown);
         edt_time = (EditText) dialog.findViewById(R.id.edt_time);
@@ -836,7 +873,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickSaveTime() {
-        Log.e("button_service", toggleButton_Services.isChecked()+"");
+        Log.e("button_service", toggleButton_Services.isChecked() + "");
         if (edt_time.getText().toString().length() == 0) {
             Toast.makeText(MainActivity.this, "Không được để trống thời gian", Toast.LENGTH_SHORT).show();
         } else {
@@ -909,11 +946,11 @@ public class MainActivity extends AppCompatActivity {
         btn_pink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_green.setBackgroundResource(R.drawable.custom_button);
-                btn_blue.setBackgroundResource(R.drawable.custom_button);
-                btn_pink.setBackgroundResource(R.drawable.custom_button_1);
-                btn_red.setBackgroundResource(R.drawable.custom_button);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                btn_green.setBackgroundResource(R.drawable.ic_green);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink_click);
+                btn_red.setBackgroundResource(R.drawable.ic_red);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
 
 
                 aBooleanRed = false;
@@ -951,11 +988,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                btn_green.setBackgroundResource(R.drawable.custom_button);
-                btn_blue.setBackgroundResource(R.drawable.custom_button_1);
-                btn_pink.setBackgroundResource(R.drawable.custom_button);
-                btn_red.setBackgroundResource(R.drawable.custom_button);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                btn_green.setBackgroundResource(R.drawable.ic_green);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue_click);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                btn_red.setBackgroundResource(R.drawable.ic_red);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                 aBooleanRed = false;
                 aBooleanGreen = false;
                 aBooleanBlue = true;
@@ -988,11 +1025,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                btn_green.setBackgroundResource(R.drawable.custom_button);
-                btn_blue.setBackgroundResource(R.drawable.custom_button);
-                btn_pink.setBackgroundResource(R.drawable.custom_button);
-                btn_red.setBackgroundResource(R.drawable.custom_button);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                btn_green.setBackgroundResource(R.drawable.ic_green);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                btn_red.setBackgroundResource(R.drawable.ic_red);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                 aBooleanYellow = true;
                 aBooleanBlue = false;
                 aBooleanGreen = false;
@@ -1026,11 +1063,11 @@ public class MainActivity extends AppCompatActivity {
         btn_red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_green.setBackgroundResource(R.drawable.custom_button);
-                btn_blue.setBackgroundResource(R.drawable.custom_button);
-                btn_pink.setBackgroundResource(R.drawable.custom_button);
-                btn_red.setBackgroundResource(R.drawable.custom_button_1);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                btn_green.setBackgroundResource(R.drawable.ic_green);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                btn_red.setBackgroundResource(R.drawable.ic_red_click);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                 aBooleanRed = true;
                 aBooleanGreen = false;
                 aBooleanPink = false;
@@ -1059,11 +1096,11 @@ public class MainActivity extends AppCompatActivity {
         btn_green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_green.setBackgroundResource(R.drawable.custom_button_1);
-                btn_blue.setBackgroundResource(R.drawable.custom_button);
-                btn_pink.setBackgroundResource(R.drawable.custom_button);
-                btn_red.setBackgroundResource(R.drawable.custom_button);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                btn_green.setBackgroundResource(R.drawable.ic_green_click);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                btn_red.setBackgroundResource(R.drawable.ic_red);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                 aBooleanGreen = true;
                 aBooleanRed = false;
                 aBooleanPink = false;
@@ -1100,9 +1137,15 @@ public class MainActivity extends AppCompatActivity {
         btn_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (BooleanSeekbar==true){
 
-                }else {
+                int phanTram =(int)(progress*100)/200;
+                txt_PhanTram.setText(phanTram+"%");
+                editor.putInt("phanTram",phanTram);
+                editor.commit();
+
+                if (BooleanSeekbar == true) {
+
+                } else {
                     if (aBoolean == true) {
                         Intent intent1 = new Intent(MainActivity.this, MyService.class);
                         intent1.putExtra("key_color", seekBar.getProgress());
@@ -1185,10 +1228,10 @@ public class MainActivity extends AppCompatActivity {
                     startService(intent);
                     Toast.makeText(MainActivity.this, "on", Toast.LENGTH_SHORT).show();
 
-                   // KhoiTaoNoification();
+                    // KhoiTaoNoification();
                 }
                 editor.putBoolean("Toggle_check", toggleButton_Services.isChecked());
-                Log.e("put", toggleButton_Services.isChecked()+"");
+                Log.e("put", toggleButton_Services.isChecked() + "");
                 editor.commit();
 
 
@@ -1197,13 +1240,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onResume() {
         Log.e("bo", MyService.aBoolean_Img_pink + "");
-        Log.e("start_app", start_app+"" );
-       // toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
+        Log.e("start_app", start_app + "");
+        // toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
+
+        txt_PhanTram.setText(sharedPreferences.getInt("phanTram",0)+"%");
+
+        if (toggleButton_Services.isChecked()==true){
+            Imv_time.setVisibility(View.VISIBLE);
+        }else {
+            Imv_time.setVisibility(View.GONE);
+        }
 
         if (MyService.aBoolean_Img_pink == true) {
             red = 255;
@@ -1217,11 +1266,11 @@ public class MainActivity extends AppCompatActivity {
             intentProgress.putExtra("key_color_green", green);
             intentProgress.putExtra("key_color_blue", blue);
             sendBroadcast(intentProgress);
-            btn_green.setBackgroundResource(R.drawable.custom_button);
-            btn_blue.setBackgroundResource(R.drawable.custom_button);
-            btn_pink.setBackgroundResource(R.drawable.custom_button_1);
-            btn_red.setBackgroundResource(R.drawable.custom_button);
-            btn_yellow.setBackgroundResource(R.drawable.custom_button);
+            btn_green.setBackgroundResource(R.drawable.ic_green);
+            btn_blue.setBackgroundResource(R.drawable.ic_blue);
+            btn_pink.setBackgroundResource(R.drawable.ic_pink_click);
+            btn_red.setBackgroundResource(R.drawable.ic_red);
+            btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
             aBooleanRed = false;
             aBooleanGreen = false;
             aBooleanBlue = false;
@@ -1245,18 +1294,17 @@ public class MainActivity extends AppCompatActivity {
                 green = 0;
                 blue = 255;
                 alpha = btn_seekBar.getProgress();
-                btn_blue.setBackgroundResource(R.drawable.custom_button_1);
+                btn_blue.setBackgroundResource(R.drawable.ic_blue_click);
                 Intent intentProgress = new Intent("color_progress");
                 intentProgress.putExtra("key_color", alpha);
                 intentProgress.putExtra("key_color_red", red);
                 intentProgress.putExtra("key_color_green", green);
                 intentProgress.putExtra("key_color_blue", blue);
                 sendBroadcast(intentProgress);
-                btn_green.setBackgroundResource(R.drawable.custom_button);
-                // btn_blue.setBackgroundResource(R.drawable.custom_button);
-                btn_pink.setBackgroundResource(R.drawable.custom_button);
-                btn_red.setBackgroundResource(R.drawable.custom_button);
-                btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                btn_green.setBackgroundResource(R.drawable.ic_green);
+                btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                btn_red.setBackgroundResource(R.drawable.ic_red);
+                btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                 aBooleanRed = false;
                 aBooleanGreen = false;
                 aBooleanBlue = true;
@@ -1281,18 +1329,17 @@ public class MainActivity extends AppCompatActivity {
                     green = 255;
                     blue = 0;
                     alpha = btn_seekBar.getProgress();
-                    btn_green.setBackgroundResource(R.drawable.custom_button_1);
                     Intent intentProgress = new Intent("color_progress");
                     intentProgress.putExtra("key_color", alpha);
                     intentProgress.putExtra("key_color_red", red);
                     intentProgress.putExtra("key_color_green", green);
                     intentProgress.putExtra("key_color_blue", blue);
                     sendBroadcast(intentProgress);
-                    //  btn_green.setBackgroundResource(R.drawable.custom_button);
-                    btn_blue.setBackgroundResource(R.drawable.custom_button);
-                    btn_pink.setBackgroundResource(R.drawable.custom_button);
-                    btn_red.setBackgroundResource(R.drawable.custom_button);
-                    btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                    btn_green.setBackgroundResource(R.drawable.ic_green_click);
+                    btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                    btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                    btn_red.setBackgroundResource(R.drawable.ic_red);
+                    btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                     aBooleanRed = false;
                     aBooleanGreen = true;
                     aBooleanBlue = false;
@@ -1319,11 +1366,11 @@ public class MainActivity extends AppCompatActivity {
                         intentProgress.putExtra("key_color_green", green);
                         intentProgress.putExtra("key_color_blue", blue);
                         sendBroadcast(intentProgress);
-                        btn_green.setBackgroundResource(R.drawable.custom_button);
-                        btn_blue.setBackgroundResource(R.drawable.custom_button);
-                        btn_pink.setBackgroundResource(R.drawable.custom_button);
-                        btn_red.setBackgroundResource(R.drawable.custom_button_1);
-                        btn_yellow.setBackgroundResource(R.drawable.custom_button);
+                        btn_green.setBackgroundResource(R.drawable.ic_green);
+                        btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                        btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                        btn_red.setBackgroundResource(R.drawable.ic_red_click);
+                        btn_yellow.setBackgroundResource(R.drawable.ic_yellow);
                         aBooleanRed = true;
                         aBooleanGreen = false;
                         aBooleanPink = false;
@@ -1352,11 +1399,11 @@ public class MainActivity extends AppCompatActivity {
                             intentProgress.putExtra("key_color_blue", blue);
                             sendBroadcast(intentProgress);
 
-                            btn_green.setBackgroundResource(R.drawable.custom_button);
-                            btn_blue.setBackgroundResource(R.drawable.custom_button);
-                            btn_pink.setBackgroundResource(R.drawable.custom_button);
-                            btn_red.setBackgroundResource(R.drawable.custom_button);
-                            btn_yellow.setBackgroundResource(R.drawable.custom_button_1);
+                            btn_green.setBackgroundResource(R.drawable.ic_green);
+                            btn_blue.setBackgroundResource(R.drawable.ic_blue);
+                            btn_pink.setBackgroundResource(R.drawable.ic_pink);
+                            btn_red.setBackgroundResource(R.drawable.ic_red);
+                            btn_yellow.setBackgroundResource(R.drawable.ic_yellow_click);
                             aBooleanYellow = true;
                             aBooleanBlue = false;
                             aBooleanGreen = false;
@@ -1433,6 +1480,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override

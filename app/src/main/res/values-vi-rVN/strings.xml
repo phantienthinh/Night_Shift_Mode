@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Night Shift Mode</string>
+    <string name="color">Color</string>
+    <string name="Text2">Chế Độ Tự Động</string>
+    <string name="on_off">Bật/Tắt</string>
+    <string name="on_off_notification">Ứng dụng đã được bật</string>
+    <string name="hen_gio">Hẹn Giờ</string>
+    <string name="nhap_so_phut">Nhập số phút</string>
+    <string name="tu">Từ:</string>
+    <string name="den">Đến:</string>
+    <string name="dieu_chinh_do_mo">Điều Chỉnh Độ Mờ</string>
+</resources>
