@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
 
 public class MyService extends Service {
-    private Context context;
+    private Context context=this;
     private Typeface typeface_Bold;
     //   private WindowManager.LayoutParams layoutParams;
     public static Boolean aBoolean_Img_pink =false;
@@ -61,6 +62,7 @@ public class MyService extends Service {
     int realHeight;
     int hour, minute;
     int tr;
+    int notificationId = 1998;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editorSv;
     private String SHARED_PREFERENCES_NAME_SerVice;
@@ -251,6 +253,7 @@ public class MyService extends Service {
 
                         break;
                     case "color_yellow":
+
                         aBoolean_progress = false;
                         aBoolean_red = false;
                         aBoolean_blue = false;
@@ -324,6 +327,7 @@ public class MyService extends Service {
                         editorSv.commit();
                         break;
                     case "color_pink":
+
                         aBoolean_progress = false;
                         aBoolean_red = false;
                         aBoolean_blue = false;
@@ -423,6 +427,13 @@ public class MyService extends Service {
                         relativeLayout.setBackgroundColor(color);
                         break;
                     case "img_pink":
+                        remoteViews.setImageViewResource(R.id.img_pink,R.drawable.ic_pink_click);
+                        remoteViews.setImageViewResource(R.id.img_blue,R.drawable.ic_blue);
+                        remoteViews.setImageViewResource(R.id.img_green,R.drawable.ic_green);
+                        remoteViews.setImageViewResource(R.id.img_red,R.drawable.ic_red);
+                        remoteViews.setImageViewResource(R.id.img_yellow,R.drawable.ic_yellow);
+                        notificationManager.notify(notificationId, notification);
+
                         aBoolean_Img_pink =true;
                         MainActivity.red = 255;
                         MainActivity.green = 192;
@@ -449,6 +460,13 @@ public class MyService extends Service {
                         aBoolean_Img_green =false;
                         break;
                     case "img_green":
+                        remoteViews.setImageViewResource(R.id.img_pink,R.drawable.ic_pink);
+                        remoteViews.setImageViewResource(R.id.img_blue,R.drawable.ic_blue);
+                        remoteViews.setImageViewResource(R.id.img_green,R.drawable.ic_green_click);
+                        remoteViews.setImageViewResource(R.id.img_red,R.drawable.ic_red);
+                        remoteViews.setImageViewResource(R.id.img_yellow,R.drawable.ic_yellow);
+                        notificationManager.notify(notificationId, notification);
+
                         MainActivity.red = 0;
                         MainActivity.green = 255;
                         MainActivity.blue=0;
@@ -474,6 +492,13 @@ public class MyService extends Service {
                         aBoolean_Img_green =true;
                         break;
                     case "img_blue":
+                        remoteViews.setImageViewResource(R.id.img_pink,R.drawable.ic_pink);
+                        remoteViews.setImageViewResource(R.id.img_blue,R.drawable.ic_blue_click);
+                        remoteViews.setImageViewResource(R.id.img_green,R.drawable.ic_green);
+                        remoteViews.setImageViewResource(R.id.img_red,R.drawable.ic_red);
+                        remoteViews.setImageViewResource(R.id.img_yellow,R.drawable.ic_yellow);
+                        notificationManager.notify(notificationId, notification);
+
                         MainActivity.red = 0;
                         MainActivity.green = 0;
                         MainActivity.blue=255;
@@ -499,6 +524,13 @@ public class MyService extends Service {
                         aBoolean_Img_green =false;
                         break;
                     case "img_yellow":
+                        remoteViews.setImageViewResource(R.id.img_pink,R.drawable.ic_pink);
+                        remoteViews.setImageViewResource(R.id.img_blue,R.drawable.ic_blue);
+                        remoteViews.setImageViewResource(R.id.img_green,R.drawable.ic_green);
+                        remoteViews.setImageViewResource(R.id.img_red,R.drawable.ic_red);
+                        remoteViews.setImageViewResource(R.id.img_yellow,R.drawable.ic_yellow_click);
+                        notificationManager.notify(notificationId, notification);
+
                         MainActivity.red = 255;
                         MainActivity.green = 255;
                         MainActivity.blue=0;
@@ -524,6 +556,13 @@ public class MyService extends Service {
                         aBoolean_Img_green =false;
                         break;
                     case "img_red":
+                        remoteViews.setImageViewResource(R.id.img_pink,R.drawable.ic_pink);
+                        remoteViews.setImageViewResource(R.id.img_blue,R.drawable.ic_blue);
+                        remoteViews.setImageViewResource(R.id.img_green,R.drawable.ic_green);
+                        remoteViews.setImageViewResource(R.id.img_red,R.drawable.ic_red_click);
+                        remoteViews.setImageViewResource(R.id.img_yellow,R.drawable.ic_yellow);
+                        notificationManager.notify(notificationId, notification);
+
                         MainActivity.red = 255;
                         MainActivity.green = 0;
                         MainActivity.blue=0;
@@ -560,6 +599,7 @@ public class MyService extends Service {
 
                         }
                         break;
+
                 }
             }
         };
@@ -590,6 +630,7 @@ public class MyService extends Service {
         filter.addAction("img_blue");
         filter.addAction("setSeekBar");
         filter.addAction("delete_windows");
+        filter.addAction("img_pink");
         //   filter.addAction("toggleButton_on");
         // filter.addAction("toggleButton_off");
         getBaseContext().registerReceiver(receiver, filter);
@@ -932,8 +973,6 @@ public class MyService extends Service {
         remoteViews = new RemoteViews(getPackageName(), R.layout.custom_noification);
 
 
-        int notificationId = 1998;
-
         notification.contentView = remoteViews;
         notification.flags = Notification.FLAG_NO_CLEAR;
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
@@ -948,6 +987,7 @@ public class MyService extends Service {
         builder.addAction(R.id.img_pink, pink, pinkPendingIntent);
         builder.setContentIntent(pinkPendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.img_pink, pinkPendingIntent);
+
 
         //sự kiện bấm vào green trên notification
         String green = "img_green";
@@ -984,6 +1024,7 @@ public class MyService extends Service {
         //sự kiện bấm vào setting trên notification
         String setting = "img_setting";
         Intent settingIntent = new Intent(this, MainActivity.class);
+        settingIntent.setFlags(settingIntent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent settingPendingIntent = PendingIntent.getActivity(this, 5, settingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.addAction(R.id.img_go_app, setting, settingPendingIntent);
         builder.setContentIntent(greenPendingIntent);
@@ -1003,25 +1044,6 @@ public class MyService extends Service {
 
         notificationManager.notify(notificationId, notification);
 
-//        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        builder.setSound(uri);
-
-//        Intent intent = new Intent("img_pink");
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
-//        builder.addAction(R.id.img_pink,"img_pink",pendingIntent);
-//        builder.setContentIntent(pendingIntent);
-//        remoteViews.setOnClickPendingIntent(R.id.img_pink,pendingIntent);
-
-
-//
-
-
-//
-//
-//
-//        //notification.contentView = remoteViews;
-//        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-//      //  notificationId++;
 
     }
 }

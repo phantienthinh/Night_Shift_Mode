@@ -3,10 +3,10 @@ package com.example.tienthinh.nightshiftmode;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,11 +30,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -51,17 +48,18 @@ import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
-import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private ImageButton img_btn1, img_btn2, img_btn3, img_btn4, img_btn5;
+    boolean showdialog;
     private TextView txt_PhanTram;
-    private TextView txt_on_off,txt_auto,txtopacity,txt_color;
-    private Typeface typeface_Bold ;
+    private TextView txt_on_off, txt_auto, txtopacity, txt_color;
+    private Typeface typeface_Bold;
     private Typeface typeface1_Medium;
     private Typeface typeface2_Regular;
     private Typeface typeface_Semibold;
     private ProgressBar progressBar;
     public static boolean start_app = false;
+    public static boolean finish = false;
     public static int alpha;
     public static int width;
     public static int height;
@@ -106,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private MyService myService;
     private RadioGroup radioGroup;
     private RadioButton rd_30, rd_60, rd_90, rd_120;
-    private Button btn_green, btn_red, btn_yellow, btn_pink, btn_blue, btn_save_time, btn_set_time;
+    private Button btn_green, btn_red, btn_yellow, btn_pink, btn_blue, btn_save_time, btn_set_time, btn_sure, btn_later;
     private EditText edt_time;
     private Dialog dialog;
     private Dialog dialog1;
@@ -515,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
         txt_PhanTram = findViewById(R.id.phanTram);
         txt_auto = findViewById(R.id.auto);
         txt_color = findViewById(R.id.color);
-        txt_on_off=findViewById(R.id.on_off);
+        txt_on_off = findViewById(R.id.on_off);
         txtopacity = findViewById(R.id.textView);
 //        toolbar=(Toolbar)findViewById(R.id.toolbar);
         Imv_time = (ImageView) findViewById(R.id.Imv_time);
@@ -831,7 +829,6 @@ public class MainActivity extends AppCompatActivity {
 
         toggleButton_CountDown = (ToggleButton) dialog.findViewById(R.id.toggleButton_CountDown);
         edt_time = (EditText) dialog.findViewById(R.id.edt_time);
-        radioGroup = (RadioGroup) dialog.findViewById(R.id.rd_group);
         rd_30 = (RadioButton) dialog.findViewById(R.id.rb_30);
         rd_60 = (RadioButton) dialog.findViewById(R.id.rb_60);
         rd_90 = (RadioButton) dialog.findViewById(R.id.rb_90);
@@ -1138,9 +1135,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                int phanTram =(int)(progress*100)/200;
-                txt_PhanTram.setText(phanTram+"%");
-                editor.putInt("phanTram",phanTram);
+                int phanTram = (int) (progress * 100) / 200;
+                txt_PhanTram.setText(phanTram + "%");
+                editor.putInt("phanTram", phanTram);
                 editor.commit();
 
                 if (BooleanSeekbar == true) {
@@ -1246,11 +1243,11 @@ public class MainActivity extends AppCompatActivity {
         Log.e("start_app", start_app + "");
         // toggleButton_Services.setChecked(sharedPreferences.getBoolean("Toggle_check", false));
 
-        txt_PhanTram.setText(sharedPreferences.getInt("phanTram",0)+"%");
+        txt_PhanTram.setText(sharedPreferences.getInt("phanTram", 0) + "%");
 
-        if (toggleButton_Services.isChecked()==true){
+        if (toggleButton_Services.isChecked() == true) {
             Imv_time.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             Imv_time.setVisibility(View.GONE);
         }
 
@@ -1484,7 +1481,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (finish == true) {
+            finish();
+        } else {
+            Dialog dialogfinish = new Dialog(this);
+            dialogfinish.setCancelable(true);
+            dialogfinish.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogfinish.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialogfinish.setContentView(R.layout.custom_dialog_rate_start);
+            dialogfinish.show();
+            img_btn1 = dialogfinish.findViewById(R.id.start1);
+            img_btn2 = dialogfinish.findViewById(R.id.start2);
+            img_btn3 = dialogfinish.findViewById(R.id.start3);
+            img_btn4 = dialogfinish.findViewById(R.id.start4);
+            img_btn5 = dialogfinish.findViewById(R.id.start5);
+            btn_later = dialogfinish.findViewById(R.id.btn_later);
+            btn_sure = dialogfinish.findViewById(R.id.btn_sure);
+
+            img_btn1.setOnClickListener(this);
+            img_btn2.setOnClickListener(this);
+            img_btn3.setOnClickListener(this);
+            img_btn4.setOnClickListener(this);
+            img_btn5.setOnClickListener(this);
+            btn_sure.setOnClickListener(this);
+            btn_later.setOnClickListener(this);
+
+        }
+
+
     }
 
     @Override
@@ -1493,6 +1517,64 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.start1:
+                img_btn1.setBackgroundResource(R.drawable.star_select);
+                img_btn2.setBackgroundResource(R.drawable.star);
+                img_btn3.setBackgroundResource(R.drawable.star);
+                img_btn4.setBackgroundResource(R.drawable.star);
+                img_btn5.setBackgroundResource(R.drawable.star);
+                break;
+            case R.id.start2:
+                img_btn1.setBackgroundResource(R.drawable.star_select);
+                img_btn2.setBackgroundResource(R.drawable.star_select);
+                img_btn3.setBackgroundResource(R.drawable.star);
+                img_btn4.setBackgroundResource(R.drawable.star);
+                img_btn5.setBackgroundResource(R.drawable.star);
+                break;
+            case R.id.start3:
+                img_btn1.setBackgroundResource(R.drawable.star_select);
+                img_btn2.setBackgroundResource(R.drawable.star_select);
+                img_btn3.setBackgroundResource(R.drawable.star_select);
+                img_btn4.setBackgroundResource(R.drawable.star);
+                img_btn5.setBackgroundResource(R.drawable.star);
+                break;
+            case R.id.start4:
+                img_btn1.setBackgroundResource(R.drawable.star_select);
+                img_btn2.setBackgroundResource(R.drawable.star_select);
+                img_btn3.setBackgroundResource(R.drawable.star_select);
+                img_btn4.setBackgroundResource(R.drawable.star_select);
+                img_btn5.setBackgroundResource(R.drawable.star);
+                break;
+            case R.id.start5:
+                img_btn1.setBackgroundResource(R.drawable.star_select);
+                img_btn2.setBackgroundResource(R.drawable.star_select);
+                img_btn3.setBackgroundResource(R.drawable.star_select);
+                img_btn4.setBackgroundResource(R.drawable.star_select);
+                img_btn5.setBackgroundResource(R.drawable.star_select);
+                break;
+            case R.id.btn_sure:
+                finish = true;
+                Uri uri = Uri.parse("market://details?id=" + MainActivity.this.getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + MainActivity.this.getPackageName())));
+                    finish();
+                }
+                break;
+            case R.id.btn_later:
+                finish();
+                break;
+
+        }
+    }
 }
 
 

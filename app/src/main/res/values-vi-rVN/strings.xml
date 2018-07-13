@@ -10,4 +10,7 @@
     <string name="tu">Từ:</string>
     <string name="den">Đến:</string>
     <string name="dieu_chinh_do_mo">Điều Chỉnh Độ Mờ</string>
+    <string name="thanks">Bạn có thích ứng dụng này không?</string>
+    <string name="sure">Có</string>
+    <string name="later">Để Sau</string>
 </resources>

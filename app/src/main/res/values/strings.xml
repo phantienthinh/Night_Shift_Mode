@@ -11,4 +11,8 @@
     <string name="den">End :</string>
     <string name="fonts">SanFranciscoDisplay-Semibold</string>
     <string name="dieu_chinh_do_mo">Adjust Transparency</string>
+        <string name="thanks">Do you love this app?</string>
+    <string name="rate">Rate My App</string>
+    <string name="sure">Sure</string>
+    <string name="later">Later</string>
 </resources>
