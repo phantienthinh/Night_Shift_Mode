@@ -15,4 +15,13 @@
     <string name="rate">Rate My App</string>
     <string name="sure">Sure</string>
     <string name="later">Later</string>
+    <string name="PleaseTurnOn">Please enable the app</string>
+    <string name="Sorry">Sorry!!! Your phone can not use this function</string>
+    <string name="Turnoff">Sorry!!! Your phone can not use this function</string>
+    <string name="TimeStart">Please select a start time</string>
+    <string name="TimeEnd">Please select a end time</string>
+    <string name="erroData">Wrong data</string>
+    <string name="enterTime">Please enter the time</string>
+    <string name="data">Please input data</string>
+    <string name="pleaseTurnOn">Please turn on the function</string>
 </resources>

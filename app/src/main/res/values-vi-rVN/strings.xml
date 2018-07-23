@@ -13,4 +13,13 @@
     <string name="thanks">Bạn có thích ứng dụng này không?</string>
     <string name="sure">Có</string>
     <string name="later">Để Sau</string>
+    <string name="PleaseTurnOn">Vui lòng bật ứng dụng</string>
+    <string name="Sorry">Xin lỗi!!! điện thoại của bạn không thể sử dụng được chức năng này</string>
+    <string name="Turnoff">Bạn đã tắt chức năng</string>
+    <string name="TimeStart">Vui lòng chọn thời gian bắt đầu</string>
+    <string name="TimeEnd">Vui lòng chọn thời gian kết thúc</string>
+    <string name="erroData">Sai dữ liệu</string>
+    <string name="enterTime">Vui lòng nhập thời gian</string>
+    <string name="data">Vui lòng nhập đúng dữ liệu</string>
+    <string name="pleaseTurnOn">"Vui lòng bật chức năng "</string>
 </resources>

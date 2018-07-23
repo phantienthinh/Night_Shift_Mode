@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_gravity="center"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp">
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <TimePicker
-            android:numbersSelectorColor="#bd3e5c"
-            android:headerBackground="#bd3e5c"
+            android:layout_gravity="center"
             android:id="@+id/time_Picker"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_300sdp"
-         >
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="341dp"
+            android:headerBackground="#bd3e5c"
+            android:numbersSelectorColor="#bd3e5c"
+            android:scaleX="0.97"
+            android:scaleY="0.97">
 
         </TimePicker>
 
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp">
+            android:layout_height="@dimen/_40sdp"
+            android:orientation="horizontal">
 
             <TextView
-                android:text="@string/tu"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="@dimen/_15sdp"
+                android:text="@string/tu"
                 android:textColor="#000"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="match_parent" />
+                android:textSize="@dimen/_15sdp" />
 
             <TextView
                 android:id="@+id/tv_time_start"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="match_parent"
-                android:textColor="#020202"
-                android:text="00:00"
                 android:gravity="center"
+                android:text="00:00"
+                android:textColor="#020202"
                 android:textSize="@dimen/_15sdp" />
 
             <TextView
-                android:layout_width="@dimen/_70sdp"
+                android:layout_width="@dimen/_50sdp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/den"
                 android:textColor="#000"
                 android:textSize="@dimen/_15sdp" />
+
             <TextView
                 android:id="@+id/tv_time_stop"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:textSize="@dimen/_15sdp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="00:00"
                 android:textColor="#060606"
-                android:gravity="center"
-                android:layout_height="match_parent" />
+                android:textSize="@dimen/_15sdp" />
 
         </LinearLayout>
 
@@ -67,8 +70,8 @@
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/custom_button_dialog1"
             android:text="Ok"
             android:textColor="#fff" />

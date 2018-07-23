@@ -65,7 +65,7 @@
                         android:gravity="center|left"
                         android:text="@string/on_off"
                         android:textColor="#000"
-                        android:textSize="@dimen/_15sdp" />
+                        android:textSize="@dimen/_14sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -133,7 +133,7 @@
                         android:gravity="center|left"
                         android:text="@string/Text2"
                         android:textColor="#000"
-                        android:textSize="@dimen/_15sdp" />
+                        android:textSize="@dimen/_14sdp" />
 
 
                 </LinearLayout>
@@ -209,7 +209,7 @@
                             android:gravity="center|left"
                             android:text="@string/color"
                             android:textColor="#000"
-                            android:textSize="@dimen/_15sdp" />
+                            android:textSize="@dimen/_14sdp" />
                     </LinearLayout>
 
 
@@ -337,7 +337,7 @@
                             android:gravity="center|left"
                             android:text="@string/dieu_chinh_do_mo"
                             android:textColor="#000"
-                            android:textSize="@dimen/_15sdp"
+                            android:textSize="@dimen/_14sdp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/edt_on_off" />
@@ -349,7 +349,7 @@
                     <SeekBar
                         android:id="@+id/seekBar"
                         android:layout_width="@dimen/_270sdp"
-                        android:layout_height="@dimen/_20sdp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:max="200"
                         android:theme="@style/MySeekBarTheme" />
@@ -371,42 +371,39 @@
             android:id="@+id/Imv_time_2"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignEnd="@+id/Imv_time"
             android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/Imv_time"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="right"
-            android:layout_marginBottom="154dp"
-            android:layout_marginRight="5dp"
-            android:elevation="5dp"
-            android:background="@drawable/ngay_thang" />
+            android:layout_marginBottom="25dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ngay_thang"
+            android:elevation="5dp" />
 
         <ImageView
             android:id="@+id/Imv_time_1"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignEnd="@+id/Imv_time"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/Imv_time"
+            android:layout_alignStart="@+id/Imv_time_2"
+            android:layout_below="@+id/Imv_time_2"
             android:layout_gravity="right"
-            android:layout_marginBottom="94dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginTop="-127dp"
             android:background="@drawable/set_time"
-            android:elevation="4dp" />
-
-        <ImageView
-            android:id="@+id/Imv_time"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
             android:elevation="4dp"
-            android:src="@drawable/button_floatting"
-            android:visibility="visible" />
+            android:layout_alignLeft="@+id/Imv_time_2" />
+
+        <!--<ImageView-->
+            <!--android:id="@+id/Imv_time"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginBottom="21dp"-->
+            <!--android:layout_marginEnd="18dp"-->
+            <!--android:elevation="4dp"-->
+            <!--android:src="@drawable/button_floatting"-->
+            <!--android:visibility="visible"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="18dp" />-->
 
     </RelativeLayout>
 

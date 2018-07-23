@@ -87,7 +87,7 @@
             android:orientation="horizontal"
             android:layout_width="@dimen/_300sdp"
             android:gravity="center"
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
             android:layout_height="@dimen/_40sdp">
 
             <Button

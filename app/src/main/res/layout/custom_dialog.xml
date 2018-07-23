@@ -43,7 +43,6 @@
                     android:id="@+id/toggleButton_CountDown"
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="@dimen/_35sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
                     android:background="@drawable/custom_togen"
                     android:textOff=""
                     android:textOn="" />
@@ -98,51 +97,46 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/ll_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_gravity="top"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/_55sdp"
-                        android:gravity="top"
-                        android:text="30'"
-                        android:textSize="@dimen/_17sdp" />
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
-                    <TextView
-
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/_27sdp"
-                        android:text="60'"
-                        android:textSize="@dimen/_17sdp" />
-
-
-                    <TextView
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/_25sdp"
-                        android:text="90'"
-                        android:textSize="@dimen/_17sdp" />
+                <TextView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="30'"
+                    android:textSize="@dimen/_17sdp" />
 
 
-                    <TextView
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/_20sdp"
-                        android:text="120'"
-                        android:textSize="@dimen/_17sdp" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_28sdp"
+                    android:layout_marginRight="@dimen/_25sdp"
+                    android:text="60'"
+                    android:textSize="@dimen/_17sdp" />
+
+
+                <TextView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:text="90'"
+                    android:textSize="@dimen/_17sdp" />
+
+
+                <TextView
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="120'"
+                    android:textSize="@dimen/_17sdp" />
             </LinearLayout>
 
 
@@ -151,7 +145,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="@dimen/_40sdp"
             android:orientation="horizontal">
 
             <ImageView
@@ -165,8 +159,13 @@
                 />
 
             <EditText
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:backgroundTint="#bd3e5c"
+                android:windowSoftInputMode="stateVisible"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:id="@+id/edt_time"
-                android:layout_width="@dimen/_225sdp"
+                android:layout_width="@dimen/_215sdp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/_15sdp"
@@ -187,7 +186,7 @@
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_195sdp"
+                android:layout_marginLeft="@dimen/_185sdp"
                 android:background="@drawable/custom_button_dialog"
                 android:gravity="center"
                 android:text="ok"
